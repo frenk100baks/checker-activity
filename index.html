@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Stats Dashboard</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: #0d0f14;
+      color: #e2e8f0;
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      min-height: 100vh;
+      padding: 24px;
+    }
+
+    h1 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #e2e8f0;
+      margin-bottom: 20px;
+    }
+
+    /* Tabs */
+    .tabs {
+      display: flex;
+      gap: 4px;
+      margin-bottom: 24px;
+      border-bottom: 1px solid #2d3748;
+      padding-bottom: 0;
+    }
+    .tab {
+      background: transparent;
+      border: 1px solid transparent;
+      border-bottom: none;
+      border-radius: 8px 8px 0 0;
+      color: #718096;
+      cursor: pointer;
+      font-size: 0.9rem;
+      font-weight: 600;
+      padding: 10px 24px;
+      position: relative;
+      bottom: -1px;
+      transition: all 0.15s;
+    }
+    .tab:hover { color: #e2e8f0; }
+    .tab.active {
+      background: #0d0f14;
+      border-color: #2d3748;
+      border-bottom-color: #0d0f14;
+      color: #a78bfa;
+    }
+    .tab-dot {
+      display: inline-block;
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      margin-right: 8px;
+    }
+    .tab[data-project="konnex"] .tab-dot { background: #a78bfa; }
+    .tab[data-project="canopy"] .tab-dot { background: #68d391; }
+    .tab-logo { height: 22px; vertical-align: middle; margin-right: 6px; }
+
+    /* Panel */
+    .panel { display: none; }
+    .panel.active { display: block; }
+
+    /* Cards */
+    .cards {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+    .card {
+      background: #161b27;
+      border: 1px solid #2d3748;
+      border-radius: 10px;
+      padding: 14px 20px;
+      min-width: 140px;
+    }
+    .card-label {
+      font-size: 0.72rem;
+      color: #718096;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 4px;
+    }
+    .card-value {
+      font-size: 1.5rem;
+      font-weight: 700;
+    }
+    .konnex .card-value { color: #a78bfa; }
+    .canopy .card-value { color: #68d391; }
+
+    /* Lookup panel */
+    .lookup-panel {
+      background: #161b27;
+      border: 1px solid #2d3748;
+      border-radius: 12px;
+      padding: 16px 20px;
+      margin-bottom: 24px;
+    }
+    .lookup-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      user-select: none;
+    }
+    .lookup-header span { font-size: 0.85rem; font-weight: 600; color: #a78bfa; }
+    .canopy .lookup-header span { color: #68d391; }
+    .lookup-toggle { margin-left: auto; font-size: 0.75rem; color: #718096; }
+    .lookup-body { display: none; margin-top: 12px; }
+    .lookup-body.open { display: block; }
+    textarea {
+      width: 100%;
+      min-height: 110px;
+      background: #0d0f14;
+      border: 1px solid #2d3748;
+      border-radius: 8px;
+      color: #90cdf4;
+      font-family: 'Courier New', monospace;
+      font-size: 0.8rem;
+      padding: 10px 14px;
+      resize: vertical;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .konnex textarea:focus { border-color: #a78bfa; }
+    .canopy textarea:focus { border-color: #68d391; }
+    textarea::placeholder { color: #4a5568; font-family: 'Segoe UI', sans-serif; font-size: 0.82rem; }
+    .lookup-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 10px;
+      align-items: center;
+    }
+    .btn-apply {
+      border: none;
+      border-radius: 8px;
+      color: #0d0f14;
+      cursor: pointer;
+      font-size: 0.85rem;
+      font-weight: 700;
+      padding: 8px 20px;
+      transition: opacity 0.15s;
+    }
+    .konnex .btn-apply { background: #a78bfa; }
+    .canopy .btn-apply { background: #68d391; }
+    .btn-apply:hover { opacity: 0.85; }
+    .btn-clear {
+      background: transparent;
+      border: 1px solid #2d3748;
+      border-radius: 8px;
+      color: #718096;
+      cursor: pointer;
+      font-size: 0.82rem;
+      padding: 8px 14px;
+      transition: all 0.15s;
+    }
+    .btn-clear:hover { border-color: #fc8181; color: #fc8181; }
+    .lookup-hint { margin-left: auto; font-size: 0.76rem; color: #4a5568; }
+    .lookup-active-badge {
+      display: none;
+      border-radius: 5px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      padding: 2px 8px;
+    }
+    .lookup-active-badge.visible { display: inline-block; }
+    .konnex .lookup-active-badge { background: #a78bfa22; border: 1px solid #a78bfa; color: #a78bfa; }
+    .canopy .lookup-active-badge { background: #68d39122; border: 1px solid #68d391; color: #68d391; }
+
+    /* Controls */
+    .controls {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    input[type="text"] {
+      background: #161b27;
+      border: 1px solid #2d3748;
+      border-radius: 8px;
+      color: #e2e8f0;
+      font-size: 0.88rem;
+      padding: 8px 14px;
+      outline: none;
+      width: 300px;
+      transition: border-color 0.2s;
+    }
+    .konnex input[type="text"]:focus { border-color: #a78bfa; }
+    .canopy input[type="text"]:focus { border-color: #68d391; }
+    input[type="text"]::placeholder { color: #4a5568; }
+
+    .filter-btn {
+      background: #161b27;
+      border: 1px solid #2d3748;
+      border-radius: 8px;
+      color: #a0aec0;
+      cursor: pointer;
+      font-size: 0.82rem;
+      padding: 8px 14px;
+      transition: all 0.15s;
+    }
+    .konnex .filter-btn:hover,
+    .konnex .filter-btn.active { border-color: #a78bfa; color: #a78bfa; }
+    .konnex .filter-btn.active { background: #a78bfa22; }
+    .canopy .filter-btn:hover,
+    .canopy .filter-btn.active { border-color: #68d391; color: #68d391; }
+    .canopy .filter-btn.active { background: #68d39122; }
+
+    .count-label { margin-left: auto; font-size: 0.82rem; color: #718096; }
+
+    /* Table */
+    .table-wrap {
+      overflow-x: auto;
+      border-radius: 12px;
+      border: 1px solid #2d3748;
+    }
+    table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+    thead { background: #161b27; position: sticky; top: 0; z-index: 1; }
+    th {
+      padding: 12px 16px;
+      text-align: left;
+      font-weight: 600;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      color: #718096;
+      cursor: pointer;
+      user-select: none;
+      white-space: nowrap;
+      border-bottom: 1px solid #2d3748;
+      transition: color 0.15s;
+    }
+    .konnex th:hover, .konnex th.sorted { color: #a78bfa; }
+    .canopy th:hover, .canopy th.sorted { color: #68d391; }
+    th .sort-icon { margin-left: 4px; opacity: 0.5; }
+    th.sorted .sort-icon { opacity: 1; }
+    tbody tr { border-bottom: 1px solid #1a202c; transition: background 0.1s; }
+    tbody tr:last-child { border-bottom: none; }
+    tbody tr:hover { background: #161b27; }
+    td { padding: 10px 16px; white-space: nowrap; }
+    .addr { font-family: 'Courier New', monospace; font-size: 0.8rem; color: #90cdf4; }
+    .points-val { font-weight: 600; color: #fbd38d; }
+    .rank-val { color: #9ae6b4; }
+    .badge {
+      display: inline-block;
+      border-radius: 5px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 2px 8px;
+    }
+    .badge-yes { background: #22543d44; color: #68d391; border: 1px solid #276749; }
+    .badge-no  { background: #742a2a22; color: #fc8181; border: 1px solid #742a2a; }
+    .ref-code { font-family: monospace; font-size: 0.78rem; color: #b794f4; }
+    .no-data { text-align: center; padding: 40px; color: #4a5568; }
+    .not-found-row td { color: #fc8181; font-size: 0.78rem; font-style: italic; }
+
+    /* Status bar */
+    .status-bar {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+      background: #161b27;
+      border: 1px solid #2d3748;
+      border-radius: 10px;
+      padding: 10px 16px;
+      margin-bottom: 20px;
+      font-size: 0.78rem;
+      color: #718096;
+    }
+    .status-item { display: flex; align-items: center; gap: 6px; }
+    .status-dot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: #48bb78;
+      flex-shrink: 0;
+    }
+    .status-dot.warn { background: #ed8936; }
+    .status-dot.err  { background: #fc8181; }
+    .status-sep { color: #2d3748; }
+    .btn-refresh {
+      margin-left: auto;
+      background: transparent;
+      border: 1px solid #2d3748;
+      border-radius: 7px;
+      color: #718096;
+      cursor: pointer;
+      font-size: 0.78rem;
+      padding: 5px 12px;
+      transition: all 0.15s;
+    }
+    .btn-refresh:hover { border-color: #a78bfa; color: #a78bfa; }
+    .btn-csv {
+      background: transparent;
+      border: 1px solid #2d3748;
+      border-radius: 7px;
+      color: #718096;
+      cursor: pointer;
+      font-size: 0.78rem;
+      padding: 5px 12px;
+      text-decoration: none;
+      transition: all 0.15s;
+      display: inline-block;
+    }
+    .konnex .btn-csv:hover { border-color: #a78bfa; color: #a78bfa; }
+    .canopy .btn-csv:hover { border-color: #68d391; color: #68d391; }
+  </style>
+</head>
+<body>
+
+<!-- ===== STATUS BAR ===== -->
+<div class="status-bar" id="global-status">
+  <div class="status-item">
+    <span class="status-dot" id="konnex-dot"></span>
+    <span id="konnex-status-text">Konnex: loading…</span>
+  </div>
+  <span class="status-sep">|</span>
+  <div class="status-item">
+    <span class="status-dot" id="canopy-dot"></span>
+    <span id="canopy-status-text">Canopy: loading…</span>
+  </div>
+  <button class="btn-refresh" onclick="reloadAll()" title="Re-read files from disk">⟳ Refresh</button>
+</div>
+
+<div class="tabs">
+  <button class="tab active" data-project="konnex" onclick="switchTab('konnex')">
+    <svg class="tab-logo" viewBox="0 0 120 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <!-- icon: asterisk in rounded square -->
+      <rect width="32" height="32" rx="8" fill="currentColor"/>
+      <line x1="16" y1="7"  x2="16" y2="25" stroke="#0d0f14" stroke-width="3.4" stroke-linecap="round"/>
+      <line x1="7.3" y1="11.5" x2="24.7" y2="20.5" stroke="#0d0f14" stroke-width="3.4" stroke-linecap="round"/>
+      <line x1="24.7" y1="11.5" x2="7.3" y2="20.5" stroke="#0d0f14" stroke-width="3.4" stroke-linecap="round"/>
+      <!-- text: konnex -->
+      <text x="38" y="23" font-family="'Segoe UI',system-ui,sans-serif" font-weight="800" font-size="17" fill="currentColor" letter-spacing="-0.3">konnex</text>
+    </svg>
+  </button>
+  <button class="tab" data-project="canopy" onclick="switchTab('canopy')">
+    <svg class="tab-logo" viewBox="0 0 148 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <!-- green circle background -->
+      <circle cx="16" cy="16" r="16" fill="#4caf50"/>
+      <!-- layered leaf shapes -->
+      <ellipse cx="16" cy="19" rx="9" ry="5.5" fill="#2e7d32" opacity="0.7"/>
+      <ellipse cx="16" cy="15" rx="8" ry="5" fill="#388e3c" opacity="0.85"/>
+      <ellipse cx="16" cy="11.5" rx="6.5" ry="4.5" fill="#43a047"/>
+      <ellipse cx="16" cy="8.5" rx="4.5" ry="3.5" fill="#66bb6a"/>
+      <!-- text: CANOPY -->
+      <text x="38" y="22" font-family="'Segoe UI',system-ui,sans-serif" font-weight="800" font-size="16" fill="currentColor" letter-spacing="1.5">CANOPY</text>
+    </svg>
+  </button>
+</div>
+
+<!-- ===== KONNEX ===== -->
+<div class="panel konnex active" id="panel-konnex">
+
+  <div class="lookup-panel">
+    <div class="lookup-header" onclick="toggleLookup('konnex')">
+      <span>Search by address list</span>
+      <span class="lookup-active-badge" id="konnex-lookup-badge">active</span>
+      <span class="lookup-toggle" id="konnex-lookup-arrow">▼ expand</span>
+    </div>
+    <div class="lookup-body" id="konnex-lookup-body">
+      <textarea id="konnex-addr-input" placeholder="Paste addresses — one per line or separated by comma, space, semicolon"></textarea>
+      <div class="lookup-actions">
+        <button class="btn-apply" onclick="applyLookup('konnex')">Apply</button>
+        <button class="btn-clear" onclick="clearLookup('konnex')">Reset</button>
+        <span class="lookup-hint" id="konnex-lookup-hint"></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="cards" id="konnex-cards">
+    <div class="card"><div class="card-label">Total wallets</div><div class="card-value" id="konnex-c-total">—</div></div>
+    <div class="card"><div class="card-label">With points</div><div class="card-value" id="konnex-c-points">—</div></div>
+    <div class="card"><div class="card-label">Twitter</div><div class="card-value" id="konnex-c-twitter">—</div></div>
+    <div class="card"><div class="card-label">Discord</div><div class="card-value" id="konnex-c-discord">—</div></div>
+    <div class="card"><div class="card-label">With ref code</div><div class="card-value" id="konnex-c-ref">—</div></div>
+    <div class="card"><div class="card-label">Ref used</div><div class="card-value" id="konnex-c-refused">—</div></div>
+  </div>
+
+  <div class="controls">
+    <input type="text" id="konnex-search" placeholder="Search by address or ref code…" oninput="render('konnex')" />
+    <button class="filter-btn" id="konnex-f-twitter" onclick="toggleFilter('konnex','twitter')">Twitter ✓</button>
+    <button class="filter-btn" id="konnex-f-discord" onclick="toggleFilter('konnex','discord')">Discord ✓</button>
+    <button class="filter-btn" id="konnex-f-ref" onclick="toggleFilter('konnex','ref')">Ref code ✓</button>
+    <button class="filter-btn" id="konnex-f-points" onclick="toggleFilter('konnex','points')">Points &gt; 0</button>
+    <span class="count-label" id="konnex-count-label"></span>
+    <a class="btn-csv" href="/api/konnex/csv" download>⬇ CSV</a>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th onclick="sortBy('konnex','address')">Address <span class="sort-icon" id="konnex-s-address"></span></th>
+          <th onclick="sortBy('konnex','points')">Points <span class="sort-icon" id="konnex-s-points">▼</span></th>
+          <th onclick="sortBy('konnex','rank')">Rank <span class="sort-icon" id="konnex-s-rank"></span></th>
+          <th onclick="sortBy('konnex','refCode')">Ref code <span class="sort-icon" id="konnex-s-refCode"></span></th>
+          <th onclick="sortBy('konnex','refCodeUsed')">Ref used <span class="sort-icon" id="konnex-s-refCodeUsed"></span></th>
+          <th onclick="sortBy('konnex','twitter')">Twitter <span class="sort-icon" id="konnex-s-twitter"></span></th>
+          <th onclick="sortBy('konnex','discord')">Discord <span class="sort-icon" id="konnex-s-discord"></span></th>
+        </tr>
+      </thead>
+      <tbody id="konnex-tbody"></tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ===== CANOPY ===== -->
+<div class="panel canopy" id="panel-canopy">
+
+  <div class="lookup-panel">
+    <div class="lookup-header" onclick="toggleLookup('canopy')">
+      <span>Search by address list</span>
+      <span class="lookup-active-badge" id="canopy-lookup-badge">active</span>
+      <span class="lookup-toggle" id="canopy-lookup-arrow">▼ expand</span>
+    </div>
+    <div class="lookup-body" id="canopy-lookup-body">
+      <textarea id="canopy-addr-input" placeholder="Paste addresses — one per line or separated by comma, space, semicolon"></textarea>
+      <div class="lookup-actions">
+        <button class="btn-apply" onclick="applyLookup('canopy')">Apply</button>
+        <button class="btn-clear" onclick="clearLookup('canopy')">Reset</button>
+        <span class="lookup-hint" id="canopy-lookup-hint"></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="cards" id="canopy-cards">
+    <div class="card"><div class="card-label">Total wallets</div><div class="card-value" id="canopy-c-total">—</div></div>
+    <div class="card"><div class="card-label">With points</div><div class="card-value" id="canopy-c-points">—</div></div>
+    <div class="card"><div class="card-label">Twitter</div><div class="card-value" id="canopy-c-twitter">—</div></div>
+    <div class="card"><div class="card-label">Discord</div><div class="card-value" id="canopy-c-discord">—</div></div>
+  </div>
+
+  <div class="controls">
+    <input type="text" id="canopy-search" placeholder="Search by address…" oninput="render('canopy')" />
+    <button class="filter-btn" id="canopy-f-twitter" onclick="toggleFilter('canopy','twitter')">Twitter ✓</button>
+    <button class="filter-btn" id="canopy-f-discord" onclick="toggleFilter('canopy','discord')">Discord ✓</button>
+    <button class="filter-btn" id="canopy-f-points" onclick="toggleFilter('canopy','points')">Points &gt; 0</button>
+    <span class="count-label" id="canopy-count-label"></span>
+    <a class="btn-csv" href="/api/canopy/csv" download>⬇ CSV</a>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th onclick="sortBy('canopy','address')">Address <span class="sort-icon" id="canopy-s-address"></span></th>
+          <th onclick="sortBy('canopy','points')">Points <span class="sort-icon" id="canopy-s-points">▼</span></th>
+          <th onclick="sortBy('canopy','rank')">Rank <span class="sort-icon" id="canopy-s-rank"></span></th>
+          <th onclick="sortBy('canopy','twitter')">Twitter <span class="sort-icon" id="canopy-s-twitter"></span></th>
+          <th onclick="sortBy('canopy','discord')">Discord <span class="sort-icon" id="canopy-s-discord"></span></th>
+        </tr>
+      </thead>
+      <tbody id="canopy-tbody"></tbody>
+    </table>
+  </div>
+</div>
+
+<script>
+  const state = {
+    konnex: {
+      rows: [],
+      sortKey: 'points', sortDir: -1,
+      filters: { twitter: false, discord: false, ref: false, points: false },
+      lookupSet: null, lookupList: [],
+    },
+    canopy: {
+      rows: [],
+      sortKey: 'points', sortDir: -1,
+      filters: { twitter: false, discord: false, points: false },
+      lookupSet: null, lookupList: [],
+    },
+  };
+
+  // Tab switching
+  function switchTab(project) {
+    document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t.dataset.project === project));
+    document.querySelectorAll('.panel').forEach(p => p.classList.toggle('active', p.id === 'panel-' + project));
+  }
+
+  // ── Status bar ──────────────────────────────────────────────────────────────
+  let lastMtime = { konnex: 0, canopy: 0 };
+
+  function fmtTime(iso) {
+    if (!iso) return "—";
+    const d = new Date(iso);
+    return d.toLocaleTimeString("uk-UA", { hour: "2-digit", minute: "2-digit", second: "2-digit" });
+  }
+
+  function updateStatusBar(status) {
+    for (const p of ["konnex", "canopy"]) {
+      const s = status[p];
+      const dot  = document.getElementById(`${p}-dot`);
+      const text = document.getElementById(`${p}-status-text`);
+      if (!s || !s.exists) {
+        dot.className = "status-dot err";
+        text.textContent = `${p}: file not found`;
+        continue;
+      }
+      const label = p.charAt(0).toUpperCase() + p.slice(1);
+      const warn  = s.truncated ? " ⚠ truncated" : "";
+      dot.className = s.truncated ? "status-dot warn" : "status-dot";
+      text.textContent = `${label}: ${s.count} wallets · updated ${fmtTime(s.updatedAt)}${warn}`;
+    }
+  }
+
+  // ── Load data ────────────────────────────────────────────────────────────────
+  async function loadAll() {
+    const [konnexData, canopyData] = await Promise.all([
+      fetch('/api/konnex').then(r => r.json()),
+      fetch('/api/canopy').then(r => r.json()),
+    ]);
+    state.konnex.rows = konnexData;
+    state.canopy.rows = canopyData;
+    updateCards('konnex');
+    updateCards('canopy');
+    render('konnex');
+    render('canopy');
+
+    // update status after loading
+    try {
+      const status = await fetch('/api/status').then(r => r.json());
+      updateStatusBar(status);
+      lastMtime.konnex = status.konnex?.mtime || 0;
+      lastMtime.canopy = status.canopy?.mtime  || 0;
+    } catch (_) {}
+  }
+
+  async function reloadAll() {
+    document.getElementById('konnex-status-text').textContent = 'Konnex: refreshing…';
+    document.getElementById('canopy-status-text').textContent  = 'Canopy: refreshing…';
+    await loadAll();
+  }
+
+  // ── Auto-poll: reload data when file changes (every 5s) ─────────────────────
+  setInterval(async () => {
+    try {
+      const status = await fetch('/api/status').then(r => r.json());
+      const kStale = status.konnex?.stale || status.konnex?.mtime !== lastMtime.konnex;
+      const cStale = status.canopy?.stale  || status.canopy?.mtime  !== lastMtime.canopy;
+      if (kStale || cStale) {
+        console.log("Files changed — reloading…");
+        await loadAll();
+      }
+    } catch (_) {}
+  }, 5000);
+
+  function updateCards(p) {
+    const rows = state[p].rows;
+    document.getElementById(`${p}-c-total`).textContent = rows.length;
+    document.getElementById(`${p}-c-points`).textContent = rows.filter(r => r.points > 0).length;
+    document.getElementById(`${p}-c-twitter`).textContent = rows.filter(r => r.twitter).length;
+    document.getElementById(`${p}-c-discord`).textContent = rows.filter(r => r.discord).length;
+    if (p === 'konnex') {
+      document.getElementById(`${p}-c-ref`).textContent = rows.filter(r => r.refCode !== '-').length;
+      document.getElementById(`${p}-c-refused`).textContent = rows.filter(r => r.refCodeUsed).length;
+    }
+  }
+
+  // Lookup
+  function toggleLookup(p) {
+    const body = document.getElementById(`${p}-lookup-body`);
+    const arrow = document.getElementById(`${p}-lookup-arrow`);
+    const open = body.classList.toggle('open');
+    arrow.textContent = open ? '▲ collapse' : '▼ expand';
+  }
+
+  function applyLookup(p) {
+    const raw = document.getElementById(`${p}-addr-input`).value;
+    const parts = raw.split(/[\n,;\s]+/).map(s => s.trim()).filter(s => s.length > 0);
+    if (!parts.length) { clearLookup(p); return; }
+    state[p].lookupList = parts;
+    state[p].lookupSet = new Set(parts.map(a => a.toLowerCase()));
+    document.getElementById(`${p}-lookup-badge`).classList.add('visible');
+    updateLookupHint(p);
+    render(p);
+  }
+
+  function clearLookup(p) {
+    state[p].lookupSet = null;
+    state[p].lookupList = [];
+    document.getElementById(`${p}-addr-input`).value = '';
+    document.getElementById(`${p}-lookup-badge`).classList.remove('visible');
+    document.getElementById(`${p}-lookup-hint`).textContent = '';
+    render(p);
+  }
+
+  function updateLookupHint(p) {
+    const s = state[p];
+    if (!s.lookupSet) return;
+    const found = s.rows.filter(r => s.lookupSet.has(r.address.toLowerCase())).length;
+    const notFound = s.lookupSet.size - found;
+    let hint = `Found: ${found} of ${s.lookupSet.size}`;
+    if (notFound > 0) hint += ` · Not found: ${notFound}`;
+    document.getElementById(`${p}-lookup-hint`).textContent = hint;
+  }
+
+  // Filters
+  function toggleFilter(p, key) {
+    state[p].filters[key] = !state[p].filters[key];
+    document.getElementById(`${p}-f-${key}`).classList.toggle('active', state[p].filters[key]);
+    render(p);
+  }
+
+  // Sort
+  function sortBy(p, key) {
+    const s = state[p];
+    if (s.lookupSet) return; // preserve paste order in lookup mode
+    if (s.sortKey === key) {
+      s.sortDir *= -1;
+    } else {
+      s.sortKey = key;
+      s.sortDir = (key === 'address' || key === 'refCode') ? 1 : -1;
+    }
+    // Update icons
+    document.querySelectorAll(`#panel-${p} th`).forEach(th => th.classList.remove('sorted'));
+    document.querySelectorAll(`#panel-${p} [id^="${p}-s-"]`).forEach(el => el.textContent = '');
+    const icon = document.getElementById(`${p}-s-${key}`);
+    if (icon) {
+      icon.textContent = s.sortDir === -1 ? '▼' : '▲';
+      icon.closest('th')?.classList.add('sorted');
+    }
+    render(p);
+  }
+
+  // Render
+  function render(p) {
+    const s = state[p];
+    const q = document.getElementById(`${p}-search`).value.toLowerCase();
+    const tbody = document.getElementById(`${p}-tbody`);
+
+    const applyFilters = (rows) => rows.filter(r => {
+      if (q && !r.address.toLowerCase().includes(q) && !(r.refCode || '').toLowerCase().includes(q)) return false;
+      if (s.filters.twitter && !r.twitter) return false;
+      if (s.filters.discord && !r.discord) return false;
+      if (s.filters.ref && r.refCode === '-') return false;
+      if (s.filters.points && r.points <= 0) return false;
+      return true;
+    });
+
+    const applySort = (rows) => [...rows].sort((a, b) => {
+      let av = a[s.sortKey], bv = b[s.sortKey];
+      if (typeof av === 'boolean') av = av ? 1 : 0, bv = bv ? 1 : 0;
+      if (av < bv) return -s.sortDir;
+      if (av > bv) return s.sortDir;
+      return 0;
+    });
+
+    if (s.lookupSet) {
+      const addrMap = new Map(s.rows.map(r => [r.address.toLowerCase(), r]));
+      const found = [], missing = [];
+      for (const addr of s.lookupList) {
+        const row = addrMap.get(addr.toLowerCase());
+        if (row) found.push(row); else missing.push(addr);
+      }
+      const filtered = applyFilters(found);
+      document.getElementById(`${p}-count-label`).textContent =
+        `Found: ${found.length} · Not found: ${missing.length} · Shown: ${filtered.length}`;
+      const rows_html = filtered.map(r => rowHtml(p, r)).join('');
+      const miss_html = missing.map(addr =>
+        `<tr class="not-found-row"><td class="addr">${addr}</td><td colspan="10">— not found in database</td></tr>`
+      ).join('');
+      tbody.innerHTML = (rows_html || `<tr><td class="no-data" colspan="10">No results found</td></tr>`) + miss_html;
+      return;
+    }
+
+    const rows = applySort(applyFilters(s.rows));
+    document.getElementById(`${p}-count-label`).textContent = `Shown: ${rows.length} / ${s.rows.length}`;
+    tbody.innerHTML = rows.length
+      ? rows.map(r => rowHtml(p, r)).join('')
+      : `<tr><td class="no-data" colspan="10">No results found</td></tr>`;
+  }
+
+  function rowHtml(p, r) {
+    if (p === 'konnex') {
+      return `<tr>
+        <td class="addr">${r.address}</td>
+        <td class="points-val">${r.points}</td>
+        <td class="rank-val">${r.rank}</td>
+        <td class="ref-code">${r.refCode}</td>
+        <td>${badge(r.refCodeUsed)}</td>
+        <td>${badge(r.twitter)}</td>
+        <td>${badge(r.discord)}</td>
+      </tr>`;
+    } else {
+      return `<tr>
+        <td class="addr">${r.address}</td>
+        <td class="points-val">${r.points}</td>
+        <td class="rank-val">${r.rank}</td>
+        <td>${badge(r.twitter)}</td>
+        <td>${badge(r.discord)}</td>
+      </tr>`;
+    }
+  }
+
+  function badge(v) {
+    return v
+      ? '<span class="badge badge-yes">✓ Yes</span>'
+      : '<span class="badge badge-no">✗ No</span>';
+  }
+
+  loadAll();
+</script>
+</body>
+</html>

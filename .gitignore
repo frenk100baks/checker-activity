@@ -1,0 +1,3 @@
+# Databases (contain sensitive tokens and credentials)
+Konnex/konnex.db.json
+Canopy/canopy.db.json
