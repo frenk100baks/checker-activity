@@ -4,8 +4,8 @@ const path = require("path");
 
 const PORT = 3000;
 
-const KONNEX_DB = path.join(__dirname, "Konnex", "konnex.db.json");
-const CANOPY_DB = path.join(__dirname, "Canopy", "canopy.db.json");
+const KONNEX_DB = path.join(__dirname, "Konnex", "db.json");
+const CANOPY_DB = path.join(__dirname, "Canopy", "db.json");
 
 // ─── Cache (mtime-based auto-reload) ──────────────────────────────────────────
 const cache = {
