@@ -33,7 +33,7 @@ checker-activity/
 ### 2) Clone and open the project
 
 ```bash
-git clone https://github.com/bskvtl/checker-activity.git
+git clone https://github.com/frenk100baks/checker-activity.git
 cd checker-activity
 ```
 
