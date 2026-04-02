@@ -4,13 +4,50 @@ const path = require("path");
 
 const PORT = 3000;
 
-const KONNEX_DB = path.join(__dirname, "Konnex", "db.json");
-const CANOPY_DB = path.join(__dirname, "Canopy", "db.json");
+const CONFIG_PATH = path.join(__dirname, "config.json");
+
+function loadDbConfig() {
+  const raw = fs.readFileSync(CONFIG_PATH, "utf-8");
+  let cfg;
+  try {
+    cfg = JSON.parse(raw);
+  } catch (e) {
+    throw new Error(`Cannot parse config.json: ${e.message}`);
+  }
+
+  if (!cfg || typeof cfg !== "object") {
+    throw new Error("Invalid config.json: root must be an object");
+  }
+  if (!cfg.konnexDbPath || !cfg.canopyDbPath || !cfg.zugChainDbPath || !cfg.xStocksDbPath || !cfg.permacastDbPath || !cfg.projectZeroDbPath || !cfg.shelbyDbPath || !cfg.surfDbPath || !cfg.truthtensorDbPath) {
+    throw new Error("config.json must contain konnexDbPath, canopyDbPath, zugChainDbPath, xStocksDbPath, permacastDbPath, projectZeroDbPath, shelbyDbPath, surfDbPath and truthtensorDbPath");
+  }
+
+  return {
+    KONNEX_DB: cfg.konnexDbPath,
+    CANOPY_DB: cfg.canopyDbPath,
+    ZUGCHAIN_DB: cfg.zugChainDbPath,
+    XSTOCKS_DB: cfg.xStocksDbPath,
+    PERMACAST_DB: cfg.permacastDbPath,
+    PROJECTZERO_DB: cfg.projectZeroDbPath,
+    SHELBY_DB: cfg.shelbyDbPath,
+    SURF_DB: cfg.surfDbPath,
+    TRUTHTENSOR_DB: cfg.truthtensorDbPath,
+  };
+}
+
+const { KONNEX_DB, CANOPY_DB, ZUGCHAIN_DB, XSTOCKS_DB, PERMACAST_DB, PROJECTZERO_DB, SHELBY_DB, SURF_DB, TRUTHTENSOR_DB } = loadDbConfig();
 
 // ─── Cache (mtime-based auto-reload) ──────────────────────────────────────────
 const cache = {
   konnex: { data: null, mtime: 0, count: 0, truncated: false, updatedAt: null },
   canopy:  { data: null, mtime: 0, count: 0, truncated: false, updatedAt: null },
+  zugchain:{ data: null, mtime: 0, count: 0, truncated: false, updatedAt: null },
+  xstocks: { data: null, mtime: 0, count: 0, truncated: false, updatedAt: null },
+  permacast: { data: null, mtime: 0, count: 0, truncated: false, updatedAt: null },
+  projectzero: { data: null, mtime: 0, count: 0, truncated: false, updatedAt: null },
+  shelby: { data: null, mtime: 0, count: 0, truncated: false, updatedAt: null },
+  surf: { data: null, mtime: 0, count: 0, truncated: false, updatedAt: null },
+  truthtensor: { data: null, mtime: 0, count: 0, truncated: false, updatedAt: null },
 };
 
 // ─── Truncated JSON fix ────────────────────────────────────────────────────────
@@ -68,6 +105,132 @@ function parseCanopy(raw) {
       discord,
     };
   }).sort((a, b) => b.points - a.points);
+}
+
+function parseZugChain(raw) {
+  return Object.entries(raw).map(([address, info]) => ({
+    address,
+    // In zugchain db.json points are stored as a string in the source file.
+    points: Number(info.points ?? info.xp ?? 0),
+    rank: Number(info.rank ?? 0),
+    nativeBalance: Number(
+      info.nativeBalance ??
+      info.native_balance ??
+      info["Native Balance"] ??
+      0
+    ),
+    // Normalize to a single boolean "twitter" field used by the UI filters.
+    twitter: !!(
+      info.twitterLinked ??
+      info.twitterConnected ??
+      info.twitter_connected ??
+      info.twitter ??
+      false
+    ),
+  })).sort((a, b) => b.points - a.points);
+}
+
+function parseXStocks(raw) {
+  return Object.entries(raw).map(([address, info]) => {
+    const refCode =
+      info.refCode ??
+      info.ReffCode ??
+      info.ref_code ??
+      info.refcode ??
+      info.reff_code ??
+      "-";
+
+    const userRegisteredRaw =
+      info.userRegistered ??
+      info.UserRegistered ??
+      info.user_registered ??
+      info.userregistered ??
+      false;
+
+    const userRegistered =
+      userRegisteredRaw === true ||
+      userRegisteredRaw === 1 ||
+      String(userRegisteredRaw).toLowerCase() === "true";
+
+    return {
+      address,
+      points: Number(info.points ?? info.Points ?? 0),
+      rank: 0, // keep shape similar (rank is not shown in UI)
+      refCode: (refCode ?? "-") || "-",
+      // reuse existing UI/filter key names:
+      // - UI uses `twitter` boolean for "connected" filters
+      // - we map it to `userRegistered`
+      twitter: userRegistered,
+      userRegistered,
+    };
+  }).sort((a, b) => b.points - a.points);
+}
+
+function parsePermacast(raw) {
+  return Object.entries(raw).map(([address, info]) => {
+    const points = Number(info.points ?? info.xp ?? info.totalPoints ?? 0);
+    const rank = Number(info.rank ?? info.position ?? 0);
+    const twitter = !!(
+      info.twitterConnected ??
+      info.twitter_connected ??
+      info.twitterLinked ??
+      info.twitter ??
+      false
+    );
+    const discord = !!(
+      info.discordConnected ??
+      info.discord_connected ??
+      info.discordLinked ??
+      info.discord ??
+      info.discordToken ??
+      false
+    );
+
+    return {
+      address,
+      points,
+      rank,
+      twitter,
+      discord,
+    };
+  }).sort((a, b) => b.points - a.points);
+}
+
+function parseProjectZero(raw) {
+  return Object.entries(raw).map(([address, info]) => ({
+    address,
+    gems: Number(info.Gems ?? info.gems ?? 0),
+    streak: Number(info.Streak ?? info.streak ?? 0),
+    refCodeUsed: !!(
+      info.ReffCodeUsed ??
+      info.reffCodeUsed ??
+      info.refCodeUsed ??
+      false
+    ),
+  })).sort((a, b) => b.gems - a.gems);
+}
+
+function parseShelby(raw) {
+  return Object.entries(raw).map(([address, info]) => ({
+    address,
+    uploadsCount: Number(info.uploadsCount ?? info["Upload Count"] ?? info.uploadCount ?? 0),
+  })).sort((a, b) => b.uploadsCount - a.uploadsCount);
+}
+
+function parseSurf(raw) {
+  return Object.entries(raw).map(([address, info]) => ({
+    address,
+    xAccount: info.x_account ?? info.xAccount ?? info["X Account"] ?? "-",
+    tasksCount: Number(info.tasksCount ?? info["Task Count"] ?? 0),
+    inviteCode: info.inviteCode ?? info["Invite Code"] ?? "-",
+  })).sort((a, b) => b.tasksCount - a.tasksCount);
+}
+
+function parseTruthtensor(raw) {
+  return Object.entries(raw).map(([address, info]) => ({
+    address,
+    agentsCount: Number(info.agentsCount ?? info["Agents Count"] ?? 0),
+  })).sort((a, b) => b.agentsCount - a.agentsCount);
 }
 
 // ─── Cache accessor ────────────────────────────────────────────────────────────
@@ -128,6 +291,41 @@ const server = http.createServer((req, res) => {
       return respond(200, "application/json", JSON.stringify(data));
     }
 
+    if (req.url === "/api/zugchain") {
+      const { data } = getOrParse("zugchain", ZUGCHAIN_DB, parseZugChain);
+      return respond(200, "application/json", JSON.stringify(data));
+    }
+
+    if (req.url === "/api/xstocks") {
+      const { data } = getOrParse("xstocks", XSTOCKS_DB, parseXStocks);
+      return respond(200, "application/json", JSON.stringify(data));
+    }
+
+    if (req.url === "/api/permacast") {
+      const { data } = getOrParse("permacast", PERMACAST_DB, parsePermacast);
+      return respond(200, "application/json", JSON.stringify(data));
+    }
+
+    if (req.url === "/api/projectzero") {
+      const { data } = getOrParse("projectzero", PROJECTZERO_DB, parseProjectZero);
+      return respond(200, "application/json", JSON.stringify(data));
+    }
+
+    if (req.url === "/api/shelby") {
+      const { data } = getOrParse("shelby", SHELBY_DB, parseShelby);
+      return respond(200, "application/json", JSON.stringify(data));
+    }
+
+    if (req.url === "/api/surf") {
+      const { data } = getOrParse("surf", SURF_DB, parseSurf);
+      return respond(200, "application/json", JSON.stringify(data));
+    }
+
+    if (req.url === "/api/truthtensor") {
+      const { data } = getOrParse("truthtensor", TRUTHTENSOR_DB, parseTruthtensor);
+      return respond(200, "application/json", JSON.stringify(data));
+    }
+
     // ── CSV download
     if (req.url === "/api/konnex/csv") {
       const { data } = getOrParse("konnex", KONNEX_DB, parseKonnex);
@@ -149,10 +347,90 @@ const server = http.createServer((req, res) => {
       return res.end(csv);
     }
 
+    if (req.url === "/api/zugchain/csv") {
+      const { data } = getOrParse("zugchain", ZUGCHAIN_DB, parseZugChain);
+      const csv = toCsv(data, ["address", "points", "rank", "nativeBalance", "twitter"]);
+      res.writeHead(200, {
+        "Content-Type": "text/csv; charset=utf-8",
+        "Content-Disposition": `attachment; filename="zugchain_${Date.now()}.csv"`,
+      });
+      return res.end(csv);
+    }
+
+    if (req.url === "/api/xstocks/csv") {
+      const { data } = getOrParse("xstocks", XSTOCKS_DB, parseXStocks);
+      const csv = toCsv(data, ["address", "points", "refCode", "userRegistered"]);
+      res.writeHead(200, {
+        "Content-Type": "text/csv; charset=utf-8",
+        "Content-Disposition": `attachment; filename="xstocks_${Date.now()}.csv"`,
+      });
+      return res.end(csv);
+    }
+
+    if (req.url === "/api/permacast/csv") {
+      const { data } = getOrParse("permacast", PERMACAST_DB, parsePermacast);
+      const csv = toCsv(data, ["address", "points", "rank", "twitter", "discord"]);
+      res.writeHead(200, {
+        "Content-Type": "text/csv; charset=utf-8",
+        "Content-Disposition": `attachment; filename="permacast_${Date.now()}.csv"`,
+      });
+      return res.end(csv);
+    }
+
+    if (req.url === "/api/projectzero/csv") {
+      const { data } = getOrParse("projectzero", PROJECTZERO_DB, parseProjectZero);
+      const csv = toCsv(data, ["address", "gems", "streak", "refCodeUsed"]);
+      res.writeHead(200, {
+        "Content-Type": "text/csv; charset=utf-8",
+        "Content-Disposition": `attachment; filename="projectzero_${Date.now()}.csv"`,
+      });
+      return res.end(csv);
+    }
+
+    if (req.url === "/api/shelby/csv") {
+      const { data } = getOrParse("shelby", SHELBY_DB, parseShelby);
+      const csv = toCsv(data, ["address", "uploadsCount"]);
+      res.writeHead(200, {
+        "Content-Type": "text/csv; charset=utf-8",
+        "Content-Disposition": `attachment; filename="shelby_${Date.now()}.csv"`,
+      });
+      return res.end(csv);
+    }
+
+    if (req.url === "/api/surf/csv") {
+      const { data } = getOrParse("surf", SURF_DB, parseSurf);
+      const csv = toCsv(data, ["address", "xAccount", "tasksCount", "inviteCode"]);
+      res.writeHead(200, {
+        "Content-Type": "text/csv; charset=utf-8",
+        "Content-Disposition": `attachment; filename="surf_${Date.now()}.csv"`,
+      });
+      return res.end(csv);
+    }
+
+    if (req.url === "/api/truthtensor/csv") {
+      const { data } = getOrParse("truthtensor", TRUTHTENSOR_DB, parseTruthtensor);
+      const csv = toCsv(data, ["address", "agentsCount"]);
+      res.writeHead(200, {
+        "Content-Type": "text/csv; charset=utf-8",
+        "Content-Disposition": `attachment; filename="truthtensor_${Date.now()}.csv"`,
+      });
+      return res.end(csv);
+    }
+
     // ── File status (UI polls this to detect changes)
     if (req.url === "/api/status") {
       const status = {};
-      for (const [project, filePath] of [["konnex", KONNEX_DB], ["canopy", CANOPY_DB]]) {
+      for (const [project, filePath] of [
+        ["konnex", KONNEX_DB],
+        ["canopy", CANOPY_DB],
+        ["zugchain", ZUGCHAIN_DB],
+        ["xstocks", XSTOCKS_DB],
+        ["permacast", PERMACAST_DB],
+        ["projectzero", PROJECTZERO_DB],
+        ["shelby", SHELBY_DB],
+        ["surf", SURF_DB],
+        ["truthtensor", TRUTHTENSOR_DB],
+      ]) {
         try {
           const stat = fs.statSync(filePath);
           const c = cache[project];
@@ -190,16 +468,31 @@ const server = http.createServer((req, res) => {
 
 server.on("error", (e) => {
   if (e.code === "EADDRINUSE") {
-    console.error(`\n  [ERROR] Порт ${PORT} вже зайнятий.`);
-    console.error(`  Закрийте інший процес або запустіть через start.bat\n`);
+    console.error(`\n  [ERROR] Port ${PORT} is already in use.`);
+    console.error("  Close another process or run via start.bat\n");
     process.exit(1);
   }
   throw e;
 });
 
 server.listen(PORT, () => {
-  console.log(`\n  Сервер запущено: http://localhost:${PORT}\n`);
-  console.log(`  Konnex DB : ${KONNEX_DB}`);
-  console.log(`  Canopy DB : ${CANOPY_DB}\n`);
-  console.log("  Дані перезавантажуються автоматично при зміні файлів.\n");
+  const printLine = (label, value) => {
+    console.log(`  ${label.padEnd(14)}: ${value}`);
+  };
+
+  console.log("");
+  printLine("Server", `http://localhost:${PORT}`);
+  console.log("");
+  printLine("Konnex DB", KONNEX_DB);
+  printLine("Canopy DB", CANOPY_DB);
+  printLine("ZugChain DB", ZUGCHAIN_DB);
+  printLine("XStocks DB", XSTOCKS_DB);
+  printLine("Permacast DB", PERMACAST_DB);
+  printLine("ProjectZero DB", PROJECTZERO_DB);
+  printLine("Shelby DB", SHELBY_DB);
+  printLine("Surf DB", SURF_DB);
+  printLine("Truthtensor DB", TRUTHTENSOR_DB);
+  console.log("");
+  console.log("  Auto-reload is enabled on file changes.");
+  console.log("");
 });

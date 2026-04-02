@@ -1,3 +1,14 @@
 # Databases (contain sensitive tokens and credentials)
-Konnex/db.json
-Canopy/db.json
+*.db.json
+db.json
+
+# Local machine paths / runtime config
+config.json
+
+# Environment and credentials
+.env
+.env.*
+*.pem
+*.key
+credentials.json
+.claude/

@@ -39,6 +39,9 @@
       cursor: pointer;
       font-size: 0.9rem;
       font-weight: 600;
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
       padding: 10px 24px;
       position: relative;
       bottom: -1px;
@@ -59,7 +62,13 @@
     }
     .tab[data-project="konnex"] .tab-dot { background: #a78bfa; }
     .tab[data-project="canopy"] .tab-dot { background: #68d391; }
-    .tab-logo { height: 22px; vertical-align: middle; margin-right: 6px; }
+    .tab[data-project="zugchain"] .tab-dot { background: #60a5fa; }
+    .tab[data-project="xstocks"] .tab-dot { background: #fbbf24; }
+    .tab[data-project="permacast"] .tab-dot { background: #f472b6; }
+    .tab[data-project="projectzero"] .tab-dot { background: #22d3ee; }
+    .tab[data-project="shelby"] .tab-dot { background: #fb7185; }
+    .tab[data-project="surf"] .tab-dot { background: #34d399; }
+    .tab[data-project="truthtensor"] .tab-dot { background: #93c5fd; }
 
     /* Panel */
     .panel { display: none; }
@@ -92,6 +101,13 @@
     }
     .konnex .card-value { color: #a78bfa; }
     .canopy .card-value { color: #68d391; }
+    .zugchain .card-value { color: #60a5fa; }
+    .xstocks .card-value { color: #fbbf24; }
+    .permacast .card-value { color: #f472b6; }
+    .projectzero .card-value { color: #22d3ee; }
+    .shelby .card-value { color: #fb7185; }
+    .surf .card-value { color: #34d399; }
+    .truthtensor .card-value { color: #93c5fd; }
 
     /* Lookup panel */
     .lookup-panel {
@@ -110,6 +126,13 @@
     }
     .lookup-header span { font-size: 0.85rem; font-weight: 600; color: #a78bfa; }
     .canopy .lookup-header span { color: #68d391; }
+    .zugchain .lookup-header span { color: #60a5fa; }
+    .xstocks .lookup-header span { color: #fbbf24; }
+    .permacast .lookup-header span { color: #f472b6; }
+    .projectzero .lookup-header span { color: #22d3ee; }
+    .shelby .lookup-header span { color: #fb7185; }
+    .surf .lookup-header span { color: #34d399; }
+    .truthtensor .lookup-header span { color: #93c5fd; }
     .lookup-toggle { margin-left: auto; font-size: 0.75rem; color: #718096; }
     .lookup-body { display: none; margin-top: 12px; }
     .lookup-body.open { display: block; }
@@ -129,6 +152,13 @@
     }
     .konnex textarea:focus { border-color: #a78bfa; }
     .canopy textarea:focus { border-color: #68d391; }
+    .zugchain textarea:focus { border-color: #60a5fa; }
+    .xstocks textarea:focus { border-color: #fbbf24; }
+    .permacast textarea:focus { border-color: #f472b6; }
+    .projectzero textarea:focus { border-color: #22d3ee; }
+    .shelby textarea:focus { border-color: #fb7185; }
+    .surf textarea:focus { border-color: #34d399; }
+    .truthtensor textarea:focus { border-color: #93c5fd; }
     textarea::placeholder { color: #4a5568; font-family: 'Segoe UI', sans-serif; font-size: 0.82rem; }
     .lookup-actions {
       display: flex;
@@ -148,6 +178,13 @@
     }
     .konnex .btn-apply { background: #a78bfa; }
     .canopy .btn-apply { background: #68d391; }
+    .zugchain .btn-apply { background: #60a5fa; }
+    .xstocks .btn-apply { background: #fbbf24; }
+    .permacast .btn-apply { background: #f472b6; }
+    .projectzero .btn-apply { background: #22d3ee; }
+    .shelby .btn-apply { background: #fb7185; }
+    .surf .btn-apply { background: #34d399; }
+    .truthtensor .btn-apply { background: #93c5fd; }
     .btn-apply:hover { opacity: 0.85; }
     .btn-clear {
       background: transparent;
@@ -171,6 +208,8 @@
     .lookup-active-badge.visible { display: inline-block; }
     .konnex .lookup-active-badge { background: #a78bfa22; border: 1px solid #a78bfa; color: #a78bfa; }
     .canopy .lookup-active-badge { background: #68d39122; border: 1px solid #68d391; color: #68d391; }
+    .permacast .lookup-active-badge { background: #f472b622; border: 1px solid #f472b6; color: #f472b6; }
+    .projectzero .lookup-active-badge { background: #22d3ee22; border: 1px solid #22d3ee; color: #22d3ee; }
 
     /* Controls */
     .controls {
@@ -193,6 +232,10 @@
     }
     .konnex input[type="text"]:focus { border-color: #a78bfa; }
     .canopy input[type="text"]:focus { border-color: #68d391; }
+    .xstocks input[type="text"]:focus { border-color: #fbbf24; }
+    .zugchain input[type="text"]:focus { border-color: #60a5fa; }
+    .permacast input[type="text"]:focus { border-color: #f472b6; }
+    .projectzero input[type="text"]:focus { border-color: #22d3ee; }
     input[type="text"]::placeholder { color: #4a5568; }
 
     .filter-btn {
@@ -211,6 +254,24 @@
     .canopy .filter-btn:hover,
     .canopy .filter-btn.active { border-color: #68d391; color: #68d391; }
     .canopy .filter-btn.active { background: #68d39122; }
+    .xstocks .filter-btn:hover,
+    .xstocks .filter-btn.active { border-color: #fbbf24; color: #fbbf24; }
+    .xstocks .filter-btn.active { background: #fbbf2422; }
+    .permacast .filter-btn:hover,
+    .permacast .filter-btn.active { border-color: #f472b6; color: #f472b6; }
+    .permacast .filter-btn.active { background: #f472b622; }
+    .projectzero .filter-btn:hover,
+    .projectzero .filter-btn.active { border-color: #22d3ee; color: #22d3ee; }
+    .projectzero .filter-btn.active { background: #22d3ee22; }
+    .shelby .filter-btn:hover,
+    .shelby .filter-btn.active { border-color: #fb7185; color: #fb7185; }
+    .shelby .filter-btn.active { background: #fb718522; }
+    .surf .filter-btn:hover,
+    .surf .filter-btn.active { border-color: #34d399; color: #34d399; }
+    .surf .filter-btn.active { background: #34d39922; }
+    .truthtensor .filter-btn:hover,
+    .truthtensor .filter-btn.active { border-color: #93c5fd; color: #93c5fd; }
+    .truthtensor .filter-btn.active { background: #93c5fd22; }
 
     .count-label { margin-left: auto; font-size: 0.82rem; color: #718096; }
 
@@ -238,6 +299,13 @@
     }
     .konnex th:hover, .konnex th.sorted { color: #a78bfa; }
     .canopy th:hover, .canopy th.sorted { color: #68d391; }
+    .zugchain th:hover, .zugchain th.sorted { color: #60a5fa; }
+    .xstocks th:hover, .xstocks th.sorted { color: #fbbf24; }
+    .permacast th:hover, .permacast th.sorted { color: #f472b6; }
+    .projectzero th:hover, .projectzero th.sorted { color: #22d3ee; }
+    .shelby th:hover, .shelby th.sorted { color: #fb7185; }
+    .surf th:hover, .surf th.sorted { color: #34d399; }
+    .truthtensor th:hover, .truthtensor th.sorted { color: #93c5fd; }
     th .sort-icon { margin-left: 4px; opacity: 0.5; }
     th.sorted .sort-icon { opacity: 1; }
     tbody tr { border-bottom: 1px solid #1a202c; transition: background 0.1s; }
@@ -310,6 +378,13 @@
     }
     .konnex .btn-csv:hover { border-color: #a78bfa; color: #a78bfa; }
     .canopy .btn-csv:hover { border-color: #68d391; color: #68d391; }
+    .zugchain .btn-csv:hover { border-color: #60a5fa; color: #60a5fa; }
+    .xstocks .btn-csv:hover { border-color: #fbbf24; color: #fbbf24; }
+    .permacast .btn-csv:hover { border-color: #f472b6; color: #f472b6; }
+    .projectzero .btn-csv:hover { border-color: #22d3ee; color: #22d3ee; }
+    .shelby .btn-csv:hover { border-color: #fb7185; color: #fb7185; }
+    .surf .btn-csv:hover { border-color: #34d399; color: #34d399; }
+    .truthtensor .btn-csv:hover { border-color: #93c5fd; color: #93c5fd; }
   </style>
 </head>
 <body>
@@ -325,33 +400,80 @@
     <span class="status-dot" id="canopy-dot"></span>
     <span id="canopy-status-text">Canopy: loading…</span>
   </div>
+  <span class="status-sep">|</span>
+  <div class="status-item">
+    <span class="status-dot" id="zugchain-dot"></span>
+    <span id="zugchain-status-text">ZugChain: loading…</span>
+  </div>
+  <span class="status-sep">|</span>
+  <div class="status-item">
+    <span class="status-dot" id="xstocks-dot"></span>
+    <span id="xstocks-status-text">XStocks: loading…</span>
+  </div>
+  <span class="status-sep">|</span>
+  <div class="status-item">
+    <span class="status-dot" id="permacast-dot"></span>
+    <span id="permacast-status-text">Permacast: loading…</span>
+  </div>
+  <span class="status-sep">|</span>
+  <div class="status-item">
+    <span class="status-dot" id="projectzero-dot"></span>
+    <span id="projectzero-status-text">ProjectZero: loading…</span>
+  </div>
+  <span class="status-sep">|</span>
+  <div class="status-item">
+    <span class="status-dot" id="shelby-dot"></span>
+    <span id="shelby-status-text">Shelby: loading…</span>
+  </div>
+  <span class="status-sep">|</span>
+  <div class="status-item">
+    <span class="status-dot" id="surf-dot"></span>
+    <span id="surf-status-text">Surf AI: loading…</span>
+  </div>
+  <span class="status-sep">|</span>
+  <div class="status-item">
+    <span class="status-dot" id="truthtensor-dot"></span>
+    <span id="truthtensor-status-text">Truthtensor: loading…</span>
+  </div>
   <button class="btn-refresh" onclick="reloadAll()" title="Re-read files from disk">⟳ Refresh</button>
 </div>
 
 <div class="tabs">
   <button class="tab active" data-project="konnex" onclick="switchTab('konnex')">
-    <svg class="tab-logo" viewBox="0 0 120 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <!-- icon: asterisk in rounded square -->
-      <rect width="32" height="32" rx="8" fill="currentColor"/>
-      <line x1="16" y1="7"  x2="16" y2="25" stroke="#0d0f14" stroke-width="3.4" stroke-linecap="round"/>
-      <line x1="7.3" y1="11.5" x2="24.7" y2="20.5" stroke="#0d0f14" stroke-width="3.4" stroke-linecap="round"/>
-      <line x1="24.7" y1="11.5" x2="7.3" y2="20.5" stroke="#0d0f14" stroke-width="3.4" stroke-linecap="round"/>
-      <!-- text: konnex -->
-      <text x="38" y="23" font-family="'Segoe UI',system-ui,sans-serif" font-weight="800" font-size="17" fill="currentColor" letter-spacing="-0.3">konnex</text>
-    </svg>
+    <span class="tab-dot"></span>
+    KONNEX
   </button>
   <button class="tab" data-project="canopy" onclick="switchTab('canopy')">
-    <svg class="tab-logo" viewBox="0 0 148 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <!-- green circle background -->
-      <circle cx="16" cy="16" r="16" fill="#4caf50"/>
-      <!-- layered leaf shapes -->
-      <ellipse cx="16" cy="19" rx="9" ry="5.5" fill="#2e7d32" opacity="0.7"/>
-      <ellipse cx="16" cy="15" rx="8" ry="5" fill="#388e3c" opacity="0.85"/>
-      <ellipse cx="16" cy="11.5" rx="6.5" ry="4.5" fill="#43a047"/>
-      <ellipse cx="16" cy="8.5" rx="4.5" ry="3.5" fill="#66bb6a"/>
-      <!-- text: CANOPY -->
-      <text x="38" y="22" font-family="'Segoe UI',system-ui,sans-serif" font-weight="800" font-size="16" fill="currentColor" letter-spacing="1.5">CANOPY</text>
-    </svg>
+    <span class="tab-dot"></span>
+    CANOPY
+  </button>
+  <button class="tab" data-project="zugchain" onclick="switchTab('zugchain')">
+    <span class="tab-dot"></span>
+    ZUGCHAIN
+  </button>
+  <button class="tab" data-project="xstocks" onclick="switchTab('xstocks')">
+    <span class="tab-dot"></span>
+    XSTOCKS
+  </button>
+  <button class="tab" data-project="permacast" onclick="switchTab('permacast')">
+    <span class="tab-dot"></span>
+    PERMACAST
+  </button>
+  <button class="tab" data-project="projectzero" onclick="switchTab('projectzero')">
+    <span class="tab-dot"></span>
+    PROJECTZERO
+  </button>
+  <button class="tab" data-project="shelby" onclick="switchTab('shelby')">
+    <span class="tab-dot"></span>
+    SHELBY
+  </button>
+  <button class="tab" data-project="surf" onclick="switchTab('surf')">
+    <span class="tab-dot"></span>
+    SURF AI
+  </button>
+  <button class="tab" data-project="truthtensor" onclick="switchTab('truthtensor')">
+    <span class="tab-dot"></span>
+    TRUTHTENSOR
   </button>
 </div>
 
@@ -462,6 +584,340 @@
   </div>
 </div>
 
+<!-- ===== ZUGCHAIN ===== -->
+<div class="panel zugchain" id="panel-zugchain">
+
+  <div class="lookup-panel">
+    <div class="lookup-header" onclick="toggleLookup('zugchain')">
+      <span>Search by address list</span>
+      <span class="lookup-active-badge" id="zugchain-lookup-badge">active</span>
+      <span class="lookup-toggle" id="zugchain-lookup-arrow">▼ expand</span>
+    </div>
+    <div class="lookup-body" id="zugchain-lookup-body">
+      <textarea id="zugchain-addr-input" placeholder="Paste addresses — one per line or separated by comma, space, semicolon"></textarea>
+      <div class="lookup-actions">
+        <button class="btn-apply" onclick="applyLookup('zugchain')">Apply</button>
+        <button class="btn-clear" onclick="clearLookup('zugchain')">Reset</button>
+        <span class="lookup-hint" id="zugchain-lookup-hint"></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="cards" id="zugchain-cards">
+    <div class="card"><div class="card-label">Total wallets</div><div class="card-value" id="zugchain-c-total">—</div></div>
+    <div class="card"><div class="card-label">With XP</div><div class="card-value" id="zugchain-c-points">—</div></div>
+    <div class="card"><div class="card-label">With Native Balance</div><div class="card-value" id="zugchain-c-native">—</div></div>
+    <div class="card"><div class="card-label">TwitterConnected</div><div class="card-value" id="zugchain-c-twitter">—</div></div>
+  </div>
+
+  <div class="controls">
+    <input type="text" id="zugchain-search" placeholder="Search by address…" oninput="render('zugchain')" />
+    <button class="filter-btn" id="zugchain-f-twitter" onclick="toggleFilter('zugchain','twitter')">TwitterConnected ✓</button>
+    <button class="filter-btn" id="zugchain-f-points" onclick="toggleFilter('zugchain','points')">XP &gt; 0</button>
+    <span class="count-label" id="zugchain-count-label"></span>
+    <a class="btn-csv" href="/api/zugchain/csv" download>⬇ CSV</a>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th onclick="sortBy('zugchain','address')">Address <span class="sort-icon" id="zugchain-s-address"></span></th>
+          <th onclick="sortBy('zugchain','points')">XP <span class="sort-icon" id="zugchain-s-points">▼</span></th>
+          <th onclick="sortBy('zugchain','rank')">Rank <span class="sort-icon" id="zugchain-s-rank"></span></th>
+          <th onclick="sortBy('zugchain','nativeBalance')">Native Balance <span class="sort-icon" id="zugchain-s-nativeBalance"></span></th>
+          <th onclick="sortBy('zugchain','twitter')">TwitterConnected <span class="sort-icon" id="zugchain-s-twitter"></span></th>
+        </tr>
+      </thead>
+      <tbody id="zugchain-tbody"></tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ===== XSTOCKS ===== -->
+<div class="panel xstocks" id="panel-xstocks">
+
+  <div class="lookup-panel">
+    <div class="lookup-header" onclick="toggleLookup('xstocks')">
+      <span>Search by address list</span>
+      <span class="lookup-active-badge" id="xstocks-lookup-badge">active</span>
+      <span class="lookup-toggle" id="xstocks-lookup-arrow">▼ expand</span>
+    </div>
+    <div class="lookup-body" id="xstocks-lookup-body">
+      <textarea id="xstocks-addr-input" placeholder="Paste addresses — one per line or separated by comma, space, semicolon"></textarea>
+      <div class="lookup-actions">
+        <button class="btn-apply" onclick="applyLookup('xstocks')">Apply</button>
+        <button class="btn-clear" onclick="clearLookup('xstocks')">Reset</button>
+        <span class="lookup-hint" id="xstocks-lookup-hint"></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="cards" id="xstocks-cards">
+    <div class="card"><div class="card-label">Total wallets</div><div class="card-value" id="xstocks-c-total">—</div></div>
+    <div class="card"><div class="card-label">With XP</div><div class="card-value" id="xstocks-c-points">—</div></div>
+    <div class="card"><div class="card-label">With ReffCode</div><div class="card-value" id="xstocks-c-ref">—</div></div>
+    <div class="card"><div class="card-label">Registered</div><div class="card-value" id="xstocks-c-twitter">—</div></div>
+  </div>
+
+  <div class="controls">
+    <input type="text" id="xstocks-search" placeholder="Search by address…" oninput="render('xstocks')" />
+    <button class="filter-btn" id="xstocks-f-twitter" onclick="toggleFilter('xstocks','twitter')">UserRegistered ✓</button>
+    <button class="filter-btn" id="xstocks-f-ref" onclick="toggleFilter('xstocks','ref')">ReffCode ✓</button>
+    <button class="filter-btn" id="xstocks-f-points" onclick="toggleFilter('xstocks','points')">XP &gt; 0</button>
+    <span class="count-label" id="xstocks-count-label"></span>
+    <a class="btn-csv" href="/api/xstocks/csv" download>⬇ CSV</a>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th onclick="sortBy('xstocks','address')">Address <span class="sort-icon" id="xstocks-s-address"></span></th>
+          <th onclick="sortBy('xstocks','points')">Points <span class="sort-icon" id="xstocks-s-points">▼</span></th>
+          <th onclick="sortBy('xstocks','refCode')">ReffCode <span class="sort-icon" id="xstocks-s-refCode"></span></th>
+          <th onclick="sortBy('xstocks','twitter')">REGISTERED <span class="sort-icon" id="xstocks-s-twitter"></span></th>
+        </tr>
+      </thead>
+      <tbody id="xstocks-tbody"></tbody>
+    </table>
+  </div>
+
+</div>
+
+<!-- ===== PERMACAST ===== -->
+<div class="panel permacast" id="panel-permacast">
+
+  <div class="lookup-panel">
+    <div class="lookup-header" onclick="toggleLookup('permacast')">
+      <span>Search by address list</span>
+      <span class="lookup-active-badge" id="permacast-lookup-badge">active</span>
+      <span class="lookup-toggle" id="permacast-lookup-arrow">▼ expand</span>
+    </div>
+    <div class="lookup-body" id="permacast-lookup-body">
+      <textarea id="permacast-addr-input" placeholder="Paste addresses — one per line or separated by comma, space, semicolon"></textarea>
+      <div class="lookup-actions">
+        <button class="btn-apply" onclick="applyLookup('permacast')">Apply</button>
+        <button class="btn-clear" onclick="clearLookup('permacast')">Reset</button>
+        <span class="lookup-hint" id="permacast-lookup-hint"></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="cards" id="permacast-cards">
+    <div class="card"><div class="card-label">Total wallets</div><div class="card-value" id="permacast-c-total">—</div></div>
+    <div class="card"><div class="card-label">With points</div><div class="card-value" id="permacast-c-points">—</div></div>
+    <div class="card"><div class="card-label">Twitter</div><div class="card-value" id="permacast-c-twitter">—</div></div>
+    <div class="card"><div class="card-label">Discord</div><div class="card-value" id="permacast-c-discord">—</div></div>
+  </div>
+
+  <div class="controls">
+    <input type="text" id="permacast-search" placeholder="Search by address…" oninput="render('permacast')" />
+    <button class="filter-btn" id="permacast-f-twitter" onclick="toggleFilter('permacast','twitter')">Twitter ✓</button>
+    <button class="filter-btn" id="permacast-f-discord" onclick="toggleFilter('permacast','discord')">Discord ✓</button>
+    <button class="filter-btn" id="permacast-f-points" onclick="toggleFilter('permacast','points')">Points &gt; 0</button>
+    <span class="count-label" id="permacast-count-label"></span>
+    <a class="btn-csv" href="/api/permacast/csv" download>⬇ CSV</a>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th onclick="sortBy('permacast','address')">Address <span class="sort-icon" id="permacast-s-address"></span></th>
+          <th onclick="sortBy('permacast','points')">Points <span class="sort-icon" id="permacast-s-points">▼</span></th>
+        </tr>
+      </thead>
+      <tbody id="permacast-tbody"></tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ===== PROJECTZERO ===== -->
+<div class="panel projectzero" id="panel-projectzero">
+
+  <div class="lookup-panel">
+    <div class="lookup-header" onclick="toggleLookup('projectzero')">
+      <span>Search by address list</span>
+      <span class="lookup-active-badge" id="projectzero-lookup-badge">active</span>
+      <span class="lookup-toggle" id="projectzero-lookup-arrow">▼ expand</span>
+    </div>
+    <div class="lookup-body" id="projectzero-lookup-body">
+      <textarea id="projectzero-addr-input" placeholder="Paste addresses — one per line or separated by comma, space, semicolon"></textarea>
+      <div class="lookup-actions">
+        <button class="btn-apply" onclick="applyLookup('projectzero')">Apply</button>
+        <button class="btn-clear" onclick="clearLookup('projectzero')">Reset</button>
+        <span class="lookup-hint" id="projectzero-lookup-hint"></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="cards" id="projectzero-cards">
+    <div class="card"><div class="card-label">Total wallets</div><div class="card-value" id="projectzero-c-total">—</div></div>
+    <div class="card"><div class="card-label">With Gems</div><div class="card-value" id="projectzero-c-points">—</div></div>
+    <div class="card"><div class="card-label">With Streak</div><div class="card-value" id="projectzero-c-streak">—</div></div>
+    <div class="card"><div class="card-label">ReffCodeUsed</div><div class="card-value" id="projectzero-c-refused">—</div></div>
+  </div>
+
+  <div class="controls">
+    <input type="text" id="projectzero-search" placeholder="Search by address…" oninput="render('projectzero')" />
+    <button class="filter-btn" id="projectzero-f-ref" onclick="toggleFilter('projectzero','ref')">ReffCodeUsed ✓</button>
+    <button class="filter-btn" id="projectzero-f-points" onclick="toggleFilter('projectzero','points')">Gems &gt; 0</button>
+    <span class="count-label" id="projectzero-count-label"></span>
+    <a class="btn-csv" href="/api/projectzero/csv" download>⬇ CSV</a>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th onclick="sortBy('projectzero','address')">Address <span class="sort-icon" id="projectzero-s-address"></span></th>
+          <th onclick="sortBy('projectzero','gems')">Gems <span class="sort-icon" id="projectzero-s-gems">▼</span></th>
+          <th onclick="sortBy('projectzero','streak')">Streak <span class="sort-icon" id="projectzero-s-streak"></span></th>
+          <th onclick="sortBy('projectzero','refCodeUsed')">ReffCodeUsed <span class="sort-icon" id="projectzero-s-refCodeUsed"></span></th>
+        </tr>
+      </thead>
+      <tbody id="projectzero-tbody"></tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ===== SHELBY ===== -->
+<div class="panel shelby" id="panel-shelby">
+
+  <div class="lookup-panel">
+    <div class="lookup-header" onclick="toggleLookup('shelby')">
+      <span>Search by address list</span>
+      <span class="lookup-active-badge" id="shelby-lookup-badge">active</span>
+      <span class="lookup-toggle" id="shelby-lookup-arrow">▼ expand</span>
+    </div>
+    <div class="lookup-body" id="shelby-lookup-body">
+      <textarea id="shelby-addr-input" placeholder="Paste addresses — one per line or separated by comma, space, semicolon"></textarea>
+      <div class="lookup-actions">
+        <button class="btn-apply" onclick="applyLookup('shelby')">Apply</button>
+        <button class="btn-clear" onclick="clearLookup('shelby')">Reset</button>
+        <span class="lookup-hint" id="shelby-lookup-hint"></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="cards" id="shelby-cards">
+    <div class="card"><div class="card-label">Total wallets</div><div class="card-value" id="shelby-c-total">—</div></div>
+    <div class="card"><div class="card-label">With uploads</div><div class="card-value" id="shelby-c-points">—</div></div>
+  </div>
+
+  <div class="controls">
+    <input type="text" id="shelby-search" placeholder="Search by address…" oninput="render('shelby')" />
+    <button class="filter-btn" id="shelby-f-points" onclick="toggleFilter('shelby','points')">Upload Count &gt; 0</button>
+    <span class="count-label" id="shelby-count-label"></span>
+    <a class="btn-csv" href="/api/shelby/csv" download>⬇ CSV</a>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th onclick="sortBy('shelby','address')">Address <span class="sort-icon" id="shelby-s-address"></span></th>
+          <th onclick="sortBy('shelby','uploadsCount')">Upload Count <span class="sort-icon" id="shelby-s-uploadsCount">▼</span></th>
+        </tr>
+      </thead>
+      <tbody id="shelby-tbody"></tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ===== SURF AI ===== -->
+<div class="panel surf" id="panel-surf">
+  <div class="lookup-panel">
+    <div class="lookup-header" onclick="toggleLookup('surf')">
+      <span>Search by address list</span>
+      <span class="lookup-active-badge" id="surf-lookup-badge">active</span>
+      <span class="lookup-toggle" id="surf-lookup-arrow">▼ expand</span>
+    </div>
+    <div class="lookup-body" id="surf-lookup-body">
+      <textarea id="surf-addr-input" placeholder="Paste addresses — one per line or separated by comma, space, semicolon"></textarea>
+      <div class="lookup-actions">
+        <button class="btn-apply" onclick="applyLookup('surf')">Apply</button>
+        <button class="btn-clear" onclick="clearLookup('surf')">Reset</button>
+        <span class="lookup-hint" id="surf-lookup-hint"></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="cards" id="surf-cards">
+    <div class="card"><div class="card-label">Total wallets</div><div class="card-value" id="surf-c-total">—</div></div>
+    <div class="card"><div class="card-label">With tasks</div><div class="card-value" id="surf-c-points">—</div></div>
+    <div class="card"><div class="card-label">X account linked</div><div class="card-value" id="surf-c-twitter">—</div></div>
+    <div class="card"><div class="card-label">With invite code</div><div class="card-value" id="surf-c-ref">—</div></div>
+  </div>
+
+  <div class="controls">
+    <input type="text" id="surf-search" placeholder="Search by address, X account, invite code…" oninput="render('surf')" />
+    <button class="filter-btn" id="surf-f-twitter" onclick="toggleFilter('surf','twitter')">X Account ✓</button>
+    <button class="filter-btn" id="surf-f-ref" onclick="toggleFilter('surf','ref')">Invite Code ✓</button>
+    <button class="filter-btn" id="surf-f-points" onclick="toggleFilter('surf','points')">Task Count &gt; 0</button>
+    <span class="count-label" id="surf-count-label"></span>
+    <a class="btn-csv" href="/api/surf/csv" download>⬇ CSV</a>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th onclick="sortBy('surf','address')">Address <span class="sort-icon" id="surf-s-address"></span></th>
+          <th onclick="sortBy('surf','xAccount')">X Account <span class="sort-icon" id="surf-s-xAccount"></span></th>
+          <th onclick="sortBy('surf','tasksCount')">Task Count <span class="sort-icon" id="surf-s-tasksCount">▼</span></th>
+          <th onclick="sortBy('surf','inviteCode')">Invite Code <span class="sort-icon" id="surf-s-inviteCode"></span></th>
+        </tr>
+      </thead>
+      <tbody id="surf-tbody"></tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ===== TRUTHTENSOR ===== -->
+<div class="panel truthtensor" id="panel-truthtensor">
+  <div class="lookup-panel">
+    <div class="lookup-header" onclick="toggleLookup('truthtensor')">
+      <span>Search by address list</span>
+      <span class="lookup-active-badge" id="truthtensor-lookup-badge">active</span>
+      <span class="lookup-toggle" id="truthtensor-lookup-arrow">▼ expand</span>
+    </div>
+    <div class="lookup-body" id="truthtensor-lookup-body">
+      <textarea id="truthtensor-addr-input" placeholder="Paste addresses — one per line or separated by comma, space, semicolon"></textarea>
+      <div class="lookup-actions">
+        <button class="btn-apply" onclick="applyLookup('truthtensor')">Apply</button>
+        <button class="btn-clear" onclick="clearLookup('truthtensor')">Reset</button>
+        <span class="lookup-hint" id="truthtensor-lookup-hint"></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="cards" id="truthtensor-cards">
+    <div class="card"><div class="card-label">Total wallets</div><div class="card-value" id="truthtensor-c-total">—</div></div>
+    <div class="card"><div class="card-label">With agents</div><div class="card-value" id="truthtensor-c-points">—</div></div>
+  </div>
+
+  <div class="controls">
+    <input type="text" id="truthtensor-search" placeholder="Search by address…" oninput="render('truthtensor')" />
+    <button class="filter-btn" id="truthtensor-f-points" onclick="toggleFilter('truthtensor','points')">Agents Count &gt; 0</button>
+    <span class="count-label" id="truthtensor-count-label"></span>
+    <a class="btn-csv" href="/api/truthtensor/csv" download>⬇ CSV</a>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th onclick="sortBy('truthtensor','address')">Address <span class="sort-icon" id="truthtensor-s-address"></span></th>
+          <th onclick="sortBy('truthtensor','agentsCount')">Agents Count <span class="sort-icon" id="truthtensor-s-agentsCount">▼</span></th>
+        </tr>
+      </thead>
+      <tbody id="truthtensor-tbody"></tbody>
+    </table>
+  </div>
+</div>
+
 <script>
   const state = {
     konnex: {
@@ -476,6 +932,48 @@
       filters: { twitter: false, discord: false, points: false },
       lookupSet: null, lookupList: [],
     },
+    zugchain: {
+      rows: [],
+      sortKey: 'points', sortDir: -1,
+      filters: { twitter: false, points: false },
+      lookupSet: null, lookupList: [],
+    },
+    xstocks: {
+      rows: [],
+      sortKey: 'points', sortDir: -1,
+      filters: { twitter: false, ref: false, points: false },
+      lookupSet: null, lookupList: [],
+    },
+    permacast: {
+      rows: [],
+      sortKey: 'points', sortDir: -1,
+      filters: { twitter: false, discord: false, points: false },
+      lookupSet: null, lookupList: [],
+    },
+    projectzero: {
+      rows: [],
+      sortKey: 'gems', sortDir: -1,
+      filters: { ref: false, points: false },
+      lookupSet: null, lookupList: [],
+    },
+    shelby: {
+      rows: [],
+      sortKey: 'uploadsCount', sortDir: -1,
+      filters: { points: false },
+      lookupSet: null, lookupList: [],
+    },
+    surf: {
+      rows: [],
+      sortKey: 'tasksCount', sortDir: -1,
+      filters: { twitter: false, ref: false, points: false },
+      lookupSet: null, lookupList: [],
+    },
+    truthtensor: {
+      rows: [],
+      sortKey: 'agentsCount', sortDir: -1,
+      filters: { points: false },
+      lookupSet: null, lookupList: [],
+    },
   };
 
   // Tab switching
@@ -485,7 +983,7 @@
   }
 
   // ── Status bar ──────────────────────────────────────────────────────────────
-  let lastMtime = { konnex: 0, canopy: 0 };
+  let lastMtime = { konnex: 0, canopy: 0, zugchain: 0, xstocks: 0, permacast: 0, projectzero: 0, shelby: 0, surf: 0, truthtensor: 0 };
 
   function fmtTime(iso) {
     if (!iso) return "—";
@@ -494,7 +992,7 @@
   }
 
   function updateStatusBar(status) {
-    for (const p of ["konnex", "canopy"]) {
+    for (const p of ["konnex", "canopy", "zugchain", "xstocks", "permacast", "projectzero", "shelby", "surf", "truthtensor"]) {
       const s = status[p];
       const dot  = document.getElementById(`${p}-dot`);
       const text = document.getElementById(`${p}-status-text`);
@@ -503,7 +1001,15 @@
         text.textContent = `${p}: file not found`;
         continue;
       }
-      const label = p.charAt(0).toUpperCase() + p.slice(1);
+      const label =
+        p === "zugchain" ? "ZugChain" :
+        p === "xstocks" ? "XStocks" :
+        p === "permacast" ? "Permacast" :
+        p === "projectzero" ? "ProjectZero" :
+        p === "shelby" ? "Shelby" :
+        p === "surf" ? "Surf AI" :
+        p === "truthtensor" ? "Truthtensor" :
+        p.charAt(0).toUpperCase() + p.slice(1);
       const warn  = s.truncated ? " ⚠ truncated" : "";
       dot.className = s.truncated ? "status-dot warn" : "status-dot";
       text.textContent = `${label}: ${s.count} wallets · updated ${fmtTime(s.updatedAt)}${warn}`;
@@ -512,16 +1018,44 @@
 
   // ── Load data ────────────────────────────────────────────────────────────────
   async function loadAll() {
-    const [konnexData, canopyData] = await Promise.all([
+    const [konnexData, canopyData, zugchainData, xstocksData, permacastData, projectZeroData, shelbyData, surfData, truthtensorData] = await Promise.all([
       fetch('/api/konnex').then(r => r.json()),
       fetch('/api/canopy').then(r => r.json()),
+      fetch('/api/zugchain').then(r => r.json()),
+      fetch('/api/xstocks').then(r => r.json()),
+      fetch('/api/permacast').then(r => r.json()),
+      fetch('/api/projectzero').then(r => r.json()),
+      fetch('/api/shelby').then(r => r.json()),
+      fetch('/api/surf').then(r => r.json()),
+      fetch('/api/truthtensor').then(r => r.json()),
     ]);
     state.konnex.rows = konnexData;
     state.canopy.rows = canopyData;
+    state.zugchain.rows = zugchainData;
+    state.xstocks.rows = xstocksData;
+    state.permacast.rows = permacastData;
+    state.projectzero.rows = projectZeroData;
+    state.shelby.rows = shelbyData;
+    state.surf.rows = surfData;
+    state.truthtensor.rows = truthtensorData;
     updateCards('konnex');
     updateCards('canopy');
+    updateCards('zugchain');
+    updateCards('xstocks');
+    updateCards('permacast');
+    updateCards('projectzero');
+    updateCards('shelby');
+    updateCards('surf');
+    updateCards('truthtensor');
     render('konnex');
     render('canopy');
+    render('zugchain');
+    render('xstocks');
+    render('permacast');
+    render('projectzero');
+    render('shelby');
+    render('surf');
+    render('truthtensor');
 
     // update status after loading
     try {
@@ -529,12 +1063,26 @@
       updateStatusBar(status);
       lastMtime.konnex = status.konnex?.mtime || 0;
       lastMtime.canopy = status.canopy?.mtime  || 0;
+      lastMtime.zugchain = status.zugchain?.mtime || 0;
+      lastMtime.xstocks = status.xstocks?.mtime || 0;
+      lastMtime.permacast = status.permacast?.mtime || 0;
+      lastMtime.projectzero = status.projectzero?.mtime || 0;
+      lastMtime.shelby = status.shelby?.mtime || 0;
+      lastMtime.surf = status.surf?.mtime || 0;
+      lastMtime.truthtensor = status.truthtensor?.mtime || 0;
     } catch (_) {}
   }
 
   async function reloadAll() {
     document.getElementById('konnex-status-text').textContent = 'Konnex: refreshing…';
     document.getElementById('canopy-status-text').textContent  = 'Canopy: refreshing…';
+    document.getElementById('zugchain-status-text').textContent = 'ZugChain: refreshing…';
+    document.getElementById('xstocks-status-text').textContent = 'XStocks: refreshing…';
+    document.getElementById('permacast-status-text').textContent = 'Permacast: refreshing…';
+    document.getElementById('projectzero-status-text').textContent = 'ProjectZero: refreshing…';
+    document.getElementById('shelby-status-text').textContent = 'Shelby: refreshing…';
+    document.getElementById('surf-status-text').textContent = 'Surf AI: refreshing…';
+    document.getElementById('truthtensor-status-text').textContent = 'Truthtensor: refreshing…';
     await loadAll();
   }
 
@@ -544,7 +1092,14 @@
       const status = await fetch('/api/status').then(r => r.json());
       const kStale = status.konnex?.stale || status.konnex?.mtime !== lastMtime.konnex;
       const cStale = status.canopy?.stale  || status.canopy?.mtime  !== lastMtime.canopy;
-      if (kStale || cStale) {
+      const zStale = status.zugchain?.stale || status.zugchain?.mtime !== lastMtime.zugchain;
+      const xStale = status.xstocks?.stale || status.xstocks?.mtime !== lastMtime.xstocks;
+      const pStale = status.permacast?.stale || status.permacast?.mtime !== lastMtime.permacast;
+      const pzStale = status.projectzero?.stale || status.projectzero?.mtime !== lastMtime.projectzero;
+      const sStale = status.shelby?.stale || status.shelby?.mtime !== lastMtime.shelby;
+      const sfStale = status.surf?.stale || status.surf?.mtime !== lastMtime.surf;
+      const ttStale = status.truthtensor?.stale || status.truthtensor?.mtime !== lastMtime.truthtensor;
+      if (kStale || cStale || zStale || xStale || pStale || pzStale || sStale || sfStale || ttStale) {
         console.log("Files changed — reloading…");
         await loadAll();
       }
@@ -553,13 +1108,50 @@
 
   function updateCards(p) {
     const rows = state[p].rows;
-    document.getElementById(`${p}-c-total`).textContent = rows.length;
-    document.getElementById(`${p}-c-points`).textContent = rows.filter(r => r.points > 0).length;
-    document.getElementById(`${p}-c-twitter`).textContent = rows.filter(r => r.twitter).length;
-    document.getElementById(`${p}-c-discord`).textContent = rows.filter(r => r.discord).length;
+    const totalEl = document.getElementById(`${p}-c-total`);
+    if (totalEl) totalEl.textContent = rows.length;
+
+    const pointsEl = document.getElementById(`${p}-c-points`);
+    if (pointsEl) pointsEl.textContent = rows.filter(r => r.points > 0).length;
+
+    const twitterEl = document.getElementById(`${p}-c-twitter`);
+    if (twitterEl) twitterEl.textContent = rows.filter(r => r.twitter).length;
+
+    const discordEl = document.getElementById(`${p}-c-discord`);
+    if (discordEl) discordEl.textContent = rows.filter(r => r.discord).length;
+
     if (p === 'konnex') {
-      document.getElementById(`${p}-c-ref`).textContent = rows.filter(r => r.refCode !== '-').length;
-      document.getElementById(`${p}-c-refused`).textContent = rows.filter(r => r.refCodeUsed).length;
+      const refEl = document.getElementById(`${p}-c-ref`);
+      if (refEl) refEl.textContent = rows.filter(r => r.refCode !== '-').length;
+      const refusedEl = document.getElementById(`${p}-c-refused`);
+      if (refusedEl) refusedEl.textContent = rows.filter(r => r.refCodeUsed).length;
+    }
+    if (p === 'xstocks') {
+      const refEl = document.getElementById(`${p}-c-ref`);
+      if (refEl) refEl.textContent = rows.filter(r => r.refCode !== '-').length;
+    }
+    if (p === 'projectzero') {
+      const streakEl = document.getElementById(`${p}-c-streak`);
+      if (streakEl) streakEl.textContent = rows.filter(r => r.streak > 0).length;
+      const refusedEl = document.getElementById(`${p}-c-refused`);
+      if (refusedEl) refusedEl.textContent = rows.filter(r => r.refCodeUsed).length;
+      if (pointsEl) pointsEl.textContent = rows.filter(r => r.gems > 0).length;
+    }
+    if (p === 'zugchain') {
+      const nativeEl = document.getElementById(`${p}-c-native`);
+      if (nativeEl) nativeEl.textContent = rows.filter(r => Number(r.nativeBalance) > 0).length;
+    }
+    if (p === 'shelby') {
+      if (pointsEl) pointsEl.textContent = rows.filter(r => r.uploadsCount > 0).length;
+    }
+    if (p === 'surf') {
+      if (pointsEl) pointsEl.textContent = rows.filter(r => r.tasksCount > 0).length;
+      if (twitterEl) twitterEl.textContent = rows.filter(r => r.xAccount && r.xAccount !== '-').length;
+      const refEl = document.getElementById(`${p}-c-ref`);
+      if (refEl) refEl.textContent = rows.filter(r => r.inviteCode && r.inviteCode !== '-').length;
+    }
+    if (p === 'truthtensor') {
+      if (pointsEl) pointsEl.textContent = rows.filter(r => r.agentsCount > 0).length;
     }
   }
 
@@ -636,11 +1228,22 @@
     const tbody = document.getElementById(`${p}-tbody`);
 
     const applyFilters = (rows) => rows.filter(r => {
-      if (q && !r.address.toLowerCase().includes(q) && !(r.refCode || '').toLowerCase().includes(q)) return false;
-      if (s.filters.twitter && !r.twitter) return false;
+      if (q && !r.address.toLowerCase().includes(q) && !(r.refCode || '').toLowerCase().includes(q) && !(r.xAccount || '').toLowerCase().includes(q) && !(r.inviteCode || '').toLowerCase().includes(q)) return false;
+      if (s.filters.twitter && !r.twitter && !(r.xAccount && r.xAccount !== '-')) return false;
       if (s.filters.discord && !r.discord) return false;
-      if (s.filters.ref && r.refCode === '-') return false;
-      if (s.filters.points && r.points <= 0) return false;
+      if (s.filters.ref) {
+        if (p === 'projectzero') {
+          if (!r.refCodeUsed) return false;
+        } else if (p === 'surf') {
+          if (!r.inviteCode || r.inviteCode === '-') return false;
+        } else if (r.refCode === '-') {
+          return false;
+        }
+      }
+      if (s.filters.points) {
+        const metric = p === 'projectzero' ? r.gems : (p === 'shelby' ? r.uploadsCount : (p === 'surf' ? r.tasksCount : (p === 'truthtensor' ? r.agentsCount : r.points)));
+        if (metric <= 0) return false;
+      }
       return true;
     });
 
@@ -688,7 +1291,58 @@
         <td>${badge(r.twitter)}</td>
         <td>${badge(r.discord)}</td>
       </tr>`;
+    }
+    if (p === 'zugchain') {
+      return `<tr>
+        <td class="addr">${r.address}</td>
+        <td class="points-val">${r.points}</td>
+        <td class="rank-val">${r.rank}</td>
+        <td class="points-val">${r.nativeBalance ?? 0}</td>
+        <td>${badge(r.twitter)}</td>
+      </tr>`;
+    }
+    if (p === 'xstocks') {
+      return `<tr>
+        <td class="addr">${r.address}</td>
+        <td class="points-val">${r.points}</td>
+        <td class="ref-code">${r.refCode}</td>
+        <td>${badge(r.twitter)}</td>
+      </tr>`;
+    }
+    if (p === 'permacast') {
+      return `<tr>
+        <td class="addr">${r.address}</td>
+        <td class="points-val">${r.points}</td>
+      </tr>`;
+    }
+    if (p === 'projectzero') {
+      return `<tr>
+        <td class="addr">${r.address}</td>
+        <td class="points-val">${r.gems}</td>
+        <td class="rank-val">${r.streak}</td>
+        <td>${badge(r.refCodeUsed)}</td>
+      </tr>`;
     } else {
+      if (p === 'shelby') {
+        return `<tr>
+        <td class="addr">${r.address}</td>
+        <td class="points-val">${r.uploadsCount}</td>
+      </tr>`;
+      }
+      if (p === 'surf') {
+        return `<tr>
+        <td class="addr">${r.address}</td>
+        <td class="ref-code">${r.xAccount || '-'}</td>
+        <td class="points-val">${r.tasksCount}</td>
+        <td class="ref-code">${r.inviteCode || '-'}</td>
+      </tr>`;
+      }
+      if (p === 'truthtensor') {
+        return `<tr>
+        <td class="addr">${r.address}</td>
+        <td class="points-val">${r.agentsCount}</td>
+      </tr>`;
+      }
       return `<tr>
         <td class="addr">${r.address}</td>
         <td class="points-val">${r.points}</td>

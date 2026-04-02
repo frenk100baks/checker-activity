@@ -1,0 +1,11 @@
+{
+  "konnexDbPath": "D:\\path\\to\\KonnexMastery\\db.json",
+  "canopyDbPath": "D:\\path\\to\\Canopy\\db.json",
+  "zugChainDbPath": "D:\\path\\to\\ZugChain\\db.json",
+  "xStocksDbPath": "D:\\path\\to\\XStocks\\db.json",
+  "permacastDbPath": "D:\\path\\to\\Permacast\\db.json",
+  "projectZeroDbPath": "D:\\path\\to\\ProjectZeroMastery\\db.json",
+  "shelbyDbPath": "D:\\path\\to\\Shelby\\db.json",
+  "surfDbPath": "D:\\path\\to\\Surf\\db.json",
+  "truthtensorDbPath": "D:\\path\\to\\Truthtensor\\db.json"
+}
