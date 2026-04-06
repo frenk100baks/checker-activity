@@ -18,8 +18,8 @@ function loadDbConfig() {
   if (!cfg || typeof cfg !== "object") {
     throw new Error("Invalid config.json: root must be an object");
   }
-  if (!cfg.konnexDbPath || !cfg.canopyDbPath || !cfg.zugChainDbPath || !cfg.xStocksDbPath || !cfg.permacastDbPath || !cfg.projectZeroDbPath || !cfg.shelbyDbPath || !cfg.surfDbPath || !cfg.truthtensorDbPath) {
-    throw new Error("config.json must contain konnexDbPath, canopyDbPath, zugChainDbPath, xStocksDbPath, permacastDbPath, projectZeroDbPath, shelbyDbPath, surfDbPath and truthtensorDbPath");
+  if (!cfg.konnexDbPath || !cfg.canopyDbPath || !cfg.zugChainDbPath || !cfg.xStocksDbPath || !cfg.permacastDbPath || !cfg.projectZeroDbPath || !cfg.shelbyDbPath || !cfg.surfDbPath || !cfg.truthtensorDbPath || !cfg.concreteDbPath || !cfg.neuraDbPath) {
+    throw new Error("config.json must contain konnexDbPath, canopyDbPath, zugChainDbPath, xStocksDbPath, permacastDbPath, projectZeroDbPath, shelbyDbPath, surfDbPath, truthtensorDbPath, concreteDbPath and neuraDbPath");
   }
 
   return {
@@ -32,10 +32,12 @@ function loadDbConfig() {
     SHELBY_DB: cfg.shelbyDbPath,
     SURF_DB: cfg.surfDbPath,
     TRUTHTENSOR_DB: cfg.truthtensorDbPath,
+    CONCRETE_DB: cfg.concreteDbPath,
+    NEURA_DB: cfg.neuraDbPath,
   };
 }
 
-const { KONNEX_DB, CANOPY_DB, ZUGCHAIN_DB, XSTOCKS_DB, PERMACAST_DB, PROJECTZERO_DB, SHELBY_DB, SURF_DB, TRUTHTENSOR_DB } = loadDbConfig();
+const { KONNEX_DB, CANOPY_DB, ZUGCHAIN_DB, XSTOCKS_DB, PERMACAST_DB, PROJECTZERO_DB, SHELBY_DB, SURF_DB, TRUTHTENSOR_DB, CONCRETE_DB, NEURA_DB } = loadDbConfig();
 
 // ─── Cache (mtime-based auto-reload) ──────────────────────────────────────────
 const cache = {
@@ -48,6 +50,8 @@ const cache = {
   shelby: { data: null, mtime: 0, count: 0, truncated: false, updatedAt: null },
   surf: { data: null, mtime: 0, count: 0, truncated: false, updatedAt: null },
   truthtensor: { data: null, mtime: 0, count: 0, truncated: false, updatedAt: null },
+  concrete: { data: null, mtime: 0, count: 0, truncated: false, updatedAt: null },
+  neura: { data: null, mtime: 0, count: 0, truncated: false, updatedAt: null },
 };
 
 // ─── Truncated JSON fix ────────────────────────────────────────────────────────
@@ -233,6 +237,99 @@ function parseTruthtensor(raw) {
   })).sort((a, b) => b.agentsCount - a.agentsCount);
 }
 
+function parseConcrete(raw) {
+  return Object.entries(raw).map(([address, info]) => {
+    const rawRef =
+      info.refCode ??
+      info.ReffCode ??
+      info.ref_code ??
+      info["ReffCode"];
+    const refCode =
+      rawRef != null && String(rawRef).trim() !== ""
+        ? String(rawRef).trim()
+        : "-";
+    return {
+      address,
+      points: Number(info.points ?? info.Points ?? 0),
+      rank: Number(info.rank ?? info.Rank ?? 0),
+      twitter: !!(info.twitterLinked ?? info.twitterConnected ?? info.twitter ?? false),
+      discord: !!(info.discordLinked ?? info.discordConnected ?? info.discord ?? false),
+      refCode,
+      refCodeUsed: !!(
+        info.refCodeUsed ??
+        info.ref_code_used ??
+        info.reffCodeUsed ??
+        info["ReffCode Used"] ??
+        false
+      ),
+      refferalsCount: Number(
+        info.refferalsCount ??
+        info.referralsCount ??
+        info.refferalCount ??
+        info.referralCount ??
+        info["RefferalsCount"] ??
+        0
+      ),
+    };
+  }).sort((a, b) => b.points - a.points);
+}
+
+function parseNeura(raw) {
+  return Object.entries(raw).map(([address, info]) => {
+    const tv = info.tradingVolume ?? {};
+    const discordLinked = !!(
+      info.discordLinked ??
+      info.discord_connected ??
+      info.discord?.linked ??
+      false
+    );
+    const twitterLinked = !!(
+      info.twitterLinked ??
+      info.twitter_connected ??
+      info.twitter?.linked ??
+      false
+    );
+    return {
+      address,
+      neuraPoints: Number(info.neuraPoints ?? info["Neura Points"] ?? 0),
+      collectedPulses: Number(
+        info.collectedPulsesCount ??
+        info.collectedPulses ??
+        info["Collected Pulses"] ??
+        0
+      ),
+      tradingVolumeMonth: Number(
+        tv.month ??
+        info.tradingVolumeMonth ??
+        info["Trading Volume: Month"] ??
+        0
+      ),
+      tradingVolumeAllTime: Number(
+        tv.allTime ??
+        info.tradingVolumeAllTime ??
+        info["Trading Volume: All Time"] ??
+        0
+      ),
+      nativeBalance: Number(
+        info.neuroNativeBalance ??
+        info.nativeBalance ??
+        info.native_balance ??
+        info["Native Balance"] ??
+        0
+      ),
+      sepoliaBalance: Number(
+        info.sepoliaNativeBalance ??
+        info.sepoliaBalance ??
+        info.sepolia_balance ??
+        info["Sepolia Balance"] ??
+        0
+      ),
+      discordLinked,
+      twitterLinked,
+    };
+  }).sort((a, b) => b.neuraPoints - a.neuraPoints);
+}
+
 // ─── Cache accessor ────────────────────────────────────────────────────────────
 function getOrParse(project, filePath, parseFn) {
   const stat = fs.statSync(filePath);
@@ -323,6 +420,16 @@ const server = http.createServer((req, res) => {
 
     if (req.url === "/api/truthtensor") {
       const { data } = getOrParse("truthtensor", TRUTHTENSOR_DB, parseTruthtensor);
+      return respond(200, "application/json", JSON.stringify(data));
+    }
+
+    if (req.url === "/api/concrete") {
+      const { data } = getOrParse("concrete", CONCRETE_DB, parseConcrete);
+      return respond(200, "application/json", JSON.stringify(data));
+    }
+
+    if (req.url === "/api/neura") {
+      const { data } = getOrParse("neura", NEURA_DB, parseNeura);
       return respond(200, "application/json", JSON.stringify(data));
     }
 
@@ -417,6 +524,36 @@ const server = http.createServer((req, res) => {
       return res.end(csv);
     }
 
+    if (req.url === "/api/concrete/csv") {
+      const { data } = getOrParse("concrete", CONCRETE_DB, parseConcrete);
+      const csv = toCsv(data, ["address", "points", "rank", "discord", "twitter", "refCode", "refCodeUsed", "refferalsCount"]);
+      res.writeHead(200, {
+        "Content-Type": "text/csv; charset=utf-8",
+        "Content-Disposition": `attachment; filename="concrete_${Date.now()}.csv"`,
+      });
+      return res.end(csv);
+    }
+
+    if (req.url === "/api/neura/csv") {
+      const { data } = getOrParse("neura", NEURA_DB, parseNeura);
+      const csv = toCsv(data, [
+        "address",
+        "neuraPoints",
+        "collectedPulses",
+        "tradingVolumeMonth",
+        "tradingVolumeAllTime",
+        "nativeBalance",
+        "sepoliaBalance",
+        "discordLinked",
+        "twitterLinked",
+      ]);
+      res.writeHead(200, {
+        "Content-Type": "text/csv; charset=utf-8",
+        "Content-Disposition": `attachment; filename="neura_${Date.now()}.csv"`,
+      });
+      return res.end(csv);
+    }
+
     // ── File status (UI polls this to detect changes)
     if (req.url === "/api/status") {
       const status = {};
@@ -430,6 +567,8 @@ const server = http.createServer((req, res) => {
         ["shelby", SHELBY_DB],
         ["surf", SURF_DB],
         ["truthtensor", TRUTHTENSOR_DB],
+        ["concrete", CONCRETE_DB],
+        ["neura", NEURA_DB],
       ]) {
         try {
           const stat = fs.statSync(filePath);
@@ -492,6 +631,8 @@ server.listen(PORT, () => {
   printLine("Shelby DB", SHELBY_DB);
   printLine("Surf DB", SURF_DB);
   printLine("Truthtensor DB", TRUTHTENSOR_DB);
+  printLine("Concrete DB", CONCRETE_DB);
+  printLine("Neura DB", NEURA_DB);
   console.log("");
   console.log("  Auto-reload is enabled on file changes.");
   console.log("");

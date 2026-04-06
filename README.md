@@ -1,27 +1,49 @@
 # CheckerActivity
 
-Dashboard for monitoring wallet activity across **Konnex**, **Canopy**, **ZugChain**, **XStocks**, **Permacast**, **ProjectZero**, **Shelby**, **Surf AI**, and **Truthtensor** projects.
+Dashboard for monitoring wallet activity across **eleven** integrated modules. Each module reads a separate `db.json` file; paths are set in `config.json` (see [Setup](#setup-and-run-english-guide)).
+
+**Special for Gentleman community:** [https://t.me/byGentleman_bot?start=ref5561204288](https://t.me/byGentleman_bot?start=ref5561204288)
+
+## Modules
+
+| Module | Config key | API base | Highlights (UI / CSV) |
+|--------|------------|----------|-------------------------|
+| **Konnex** | `konnexDbPath` | `/api/konnex` | Points, rank, ref code, Twitter / Discord, ref used |
+| **Canopy** | `canopyDbPath` | `/api/canopy` | Points, rank, Twitter, Discord |
+| **ZugChain** | `zugChainDbPath` | `/api/zugchain` | XP, rank, **Native Balance**, TwitterConnected |
+| **XStocks** | `xStocksDbPath` | `/api/xstocks` | Points, ReffCode, registered |
+| **Permacast** | `permacastDbPath` | `/api/permacast` | Points, rank, Twitter, Discord |
+| **ProjectZero** | `projectZeroDbPath` | `/api/projectzero` | Gems, streak, ReffCode used |
+| **Shelby** | `shelbyDbPath` | `/api/shelby` | Address, upload count |
+| **Surf AI** | `surfDbPath` | `/api/surf` | X account, task count, invite code |
+| **Truthtensor** | `truthtensorDbPath` | `/api/truthtensor` | Address, agents count |
+| **Concrete** | `concreteDbPath` | `/api/concrete` | Points, rank, Twitter / Discord, ReffCode, ReffCode used, referrals count |
+| **Neura** | `neuraDbPath` | `/api/neura` | Neura points, pulses, trading volumes, native / Sepolia balance, Discord / Twitter linked |
+
+CSV for each module: append `/csv` to the same path (e.g. `GET /api/neura/csv`).
 
 ## Features
 
-- **Nine-tab UI** — switch between Konnex, Canopy, ZugChain, XStocks, Permacast, ProjectZero, Shelby, Surf AI, and Truthtensor data
-- **Auto-reload** — detects file changes every 5 seconds and refreshes data automatically
-- **Address lookup** — paste a list of addresses to check their status in bulk
-- **Filters** — filter by Twitter connected, Discord connected, has points, has ref code
-- **Sorting** — click any column header to sort
-- **Search** — search by wallet address or ref code
-- **CSV export** — download current data as a CSV file
-- **Truncated JSON recovery** — gracefully handles incomplete/truncated database files
+- **Eleven-tab UI** — one tab per module; switch to compare projects side by side in the same layout
+- **Auto-reload** — polls file metadata every 5 seconds and reloads when `db.json` changes
+- **Address lookup** — paste many addresses; order is preserved when matching
+- **Filters & search** — per module (points/XP, Twitter, Discord, ref codes, etc., where applicable)
+- **Sorting** — click column headers
+- **CSV export** — per-module download links in the UI
+- **Truncated JSON recovery** — best-effort parse if a `db.json` was cut off mid-file
 
 ## Project Structure
 
 ```
 checker-activity/
-├── server.js        — HTTP server (port 3000), data parsing, API
-├── index.html       — Dashboard UI
-├── start.bat        — Launch script (Windows)
-└── config.example.json — template with sample absolute paths
+├── server.js           — HTTP server (port 3000), data parsing, API
+├── index.html          — Dashboard UI (all module tabs)
+├── start.bat           — Launch script (Windows; frees port 3000)
+├── config.example.json — committed template (copy to config.json)
+└── config.json         — your local paths (gitignored; create from template)
 ```
+
+`.gitignore` also excludes local secrets and typical `db.json` files so databases are not committed by mistake.
 
 ## Setup and Run (English Guide)
 
@@ -56,6 +78,8 @@ Then edit `config.json` and set absolute paths to your local module files:
 - `shelbyDbPath`
 - `surfDbPath`
 - `truthtensorDbPath`
+- `concreteDbPath`
+- `neuraDbPath`
 
 Example (`config.example.json`):
 
@@ -69,7 +93,9 @@ Example (`config.example.json`):
   "projectZeroDbPath": "D:\\path\\to\\ProjectZeroMastery\\db.json",
   "shelbyDbPath": "D:\\path\\to\\Shelby\\db.json",
   "surfDbPath": "D:\\path\\to\\Surf\\db.json",
-  "truthtensorDbPath": "D:\\path\\to\\Truthtensor\\db.json"
+  "truthtensorDbPath": "D:\\path\\to\\Truthtensor\\db.json",
+  "concreteDbPath": "D:\\path\\to\\Concrete\\db.json",
+  "neuraDbPath": "D:\\path\\to\\Neura\\db.json"
 }
 ```
 
@@ -117,6 +143,8 @@ Windows alternative:
 | `GET /api/shelby` | Shelby wallet data (JSON) |
 | `GET /api/surf` | Surf AI wallet data (JSON) |
 | `GET /api/truthtensor` | Truthtensor wallet data (JSON) |
+| `GET /api/concrete` | Concrete wallet data (JSON) |
+| `GET /api/neura` | Neura wallet data (JSON) |
 | `GET /api/konnex/csv` | Konnex data as CSV download |
 | `GET /api/canopy/csv` | Canopy data as CSV download |
 | `GET /api/zugchain/csv` | ZugChain data as CSV download |
@@ -126,4 +154,6 @@ Windows alternative:
 | `GET /api/shelby/csv` | Shelby data as CSV download |
 | `GET /api/surf/csv` | Surf AI data as CSV download |
 | `GET /api/truthtensor/csv` | Truthtensor data as CSV download |
+| `GET /api/concrete/csv` | Concrete data as CSV download |
+| `GET /api/neura/csv` | Neura data as CSV download |
 | `GET /api/status` | File metadata and cache status |

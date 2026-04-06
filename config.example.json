@@ -7,5 +7,7 @@
   "projectZeroDbPath": "D:\\path\\to\\ProjectZeroMastery\\db.json",
   "shelbyDbPath": "D:\\path\\to\\Shelby\\db.json",
   "surfDbPath": "D:\\path\\to\\Surf\\db.json",
-  "truthtensorDbPath": "D:\\path\\to\\Truthtensor\\db.json"
+  "truthtensorDbPath": "D:\\path\\to\\Truthtensor\\db.json",
+  "concreteDbPath": "D:\\path\\to\\Concrete\\db.json",
+  "neuraDbPath": "D:\\path\\to\\Neura\\db.json"
 }

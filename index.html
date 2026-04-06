@@ -69,6 +69,8 @@
     .tab[data-project="shelby"] .tab-dot { background: #fb7185; }
     .tab[data-project="surf"] .tab-dot { background: #34d399; }
     .tab[data-project="truthtensor"] .tab-dot { background: #93c5fd; }
+    .tab[data-project="concrete"] .tab-dot { background: #f59e0b; }
+    .tab[data-project="neura"] .tab-dot { background: #a855f7; }
 
     /* Panel */
     .panel { display: none; }
@@ -108,6 +110,8 @@
     .shelby .card-value { color: #fb7185; }
     .surf .card-value { color: #34d399; }
     .truthtensor .card-value { color: #93c5fd; }
+    .concrete .card-value { color: #f59e0b; }
+    .neura .card-value { color: #a855f7; }
 
     /* Lookup panel */
     .lookup-panel {
@@ -133,6 +137,8 @@
     .shelby .lookup-header span { color: #fb7185; }
     .surf .lookup-header span { color: #34d399; }
     .truthtensor .lookup-header span { color: #93c5fd; }
+    .concrete .lookup-header span { color: #f59e0b; }
+    .neura .lookup-header span { color: #a855f7; }
     .lookup-toggle { margin-left: auto; font-size: 0.75rem; color: #718096; }
     .lookup-body { display: none; margin-top: 12px; }
     .lookup-body.open { display: block; }
@@ -159,6 +165,8 @@
     .shelby textarea:focus { border-color: #fb7185; }
     .surf textarea:focus { border-color: #34d399; }
     .truthtensor textarea:focus { border-color: #93c5fd; }
+    .concrete textarea:focus { border-color: #f59e0b; }
+    .neura textarea:focus { border-color: #a855f7; }
     textarea::placeholder { color: #4a5568; font-family: 'Segoe UI', sans-serif; font-size: 0.82rem; }
     .lookup-actions {
       display: flex;
@@ -185,6 +193,8 @@
     .shelby .btn-apply { background: #fb7185; }
     .surf .btn-apply { background: #34d399; }
     .truthtensor .btn-apply { background: #93c5fd; }
+    .concrete .btn-apply { background: #f59e0b; }
+    .neura .btn-apply { background: #a855f7; }
     .btn-apply:hover { opacity: 0.85; }
     .btn-clear {
       background: transparent;
@@ -210,6 +220,8 @@
     .canopy .lookup-active-badge { background: #68d39122; border: 1px solid #68d391; color: #68d391; }
     .permacast .lookup-active-badge { background: #f472b622; border: 1px solid #f472b6; color: #f472b6; }
     .projectzero .lookup-active-badge { background: #22d3ee22; border: 1px solid #22d3ee; color: #22d3ee; }
+    .concrete .lookup-active-badge { background: #f59e0b22; border: 1px solid #f59e0b; color: #f59e0b; }
+    .neura .lookup-active-badge { background: #a855f722; border: 1px solid #a855f7; color: #a855f7; }
 
     /* Controls */
     .controls {
@@ -236,6 +248,11 @@
     .zugchain input[type="text"]:focus { border-color: #60a5fa; }
     .permacast input[type="text"]:focus { border-color: #f472b6; }
     .projectzero input[type="text"]:focus { border-color: #22d3ee; }
+    .shelby input[type="text"]:focus { border-color: #fb7185; }
+    .surf input[type="text"]:focus { border-color: #34d399; }
+    .truthtensor input[type="text"]:focus { border-color: #93c5fd; }
+    .concrete input[type="text"]:focus { border-color: #f59e0b; }
+    .neura input[type="text"]:focus { border-color: #a855f7; }
     input[type="text"]::placeholder { color: #4a5568; }
 
     .filter-btn {
@@ -272,6 +289,12 @@
     .truthtensor .filter-btn:hover,
     .truthtensor .filter-btn.active { border-color: #93c5fd; color: #93c5fd; }
     .truthtensor .filter-btn.active { background: #93c5fd22; }
+    .concrete .filter-btn:hover,
+    .concrete .filter-btn.active { border-color: #f59e0b; color: #f59e0b; }
+    .concrete .filter-btn.active { background: #f59e0b22; }
+    .neura .filter-btn:hover,
+    .neura .filter-btn.active { border-color: #a855f7; color: #a855f7; }
+    .neura .filter-btn.active { background: #a855f722; }
 
     .count-label { margin-left: auto; font-size: 0.82rem; color: #718096; }
 
@@ -306,6 +329,8 @@
     .shelby th:hover, .shelby th.sorted { color: #fb7185; }
     .surf th:hover, .surf th.sorted { color: #34d399; }
     .truthtensor th:hover, .truthtensor th.sorted { color: #93c5fd; }
+    .concrete th:hover, .concrete th.sorted { color: #f59e0b; }
+    .neura th:hover, .neura th.sorted { color: #a855f7; }
     th .sort-icon { margin-left: 4px; opacity: 0.5; }
     th.sorted .sort-icon { opacity: 1; }
     tbody tr { border-bottom: 1px solid #1a202c; transition: background 0.1s; }
@@ -385,6 +410,8 @@
     .shelby .btn-csv:hover { border-color: #fb7185; color: #fb7185; }
     .surf .btn-csv:hover { border-color: #34d399; color: #34d399; }
     .truthtensor .btn-csv:hover { border-color: #93c5fd; color: #93c5fd; }
+    .concrete .btn-csv:hover { border-color: #f59e0b; color: #f59e0b; }
+    .neura .btn-csv:hover { border-color: #a855f7; color: #a855f7; }
   </style>
 </head>
 <body>
@@ -435,6 +462,16 @@
     <span class="status-dot" id="truthtensor-dot"></span>
     <span id="truthtensor-status-text">Truthtensor: loading…</span>
   </div>
+  <span class="status-sep">|</span>
+  <div class="status-item">
+    <span class="status-dot" id="concrete-dot"></span>
+    <span id="concrete-status-text">Concrete: loading…</span>
+  </div>
+  <span class="status-sep">|</span>
+  <div class="status-item">
+    <span class="status-dot" id="neura-dot"></span>
+    <span id="neura-status-text">Neura: loading…</span>
+  </div>
   <button class="btn-refresh" onclick="reloadAll()" title="Re-read files from disk">⟳ Refresh</button>
 </div>
 
@@ -474,6 +511,14 @@
   <button class="tab" data-project="truthtensor" onclick="switchTab('truthtensor')">
     <span class="tab-dot"></span>
     TRUTHTENSOR
+  </button>
+  <button class="tab" data-project="concrete" onclick="switchTab('concrete')">
+    <span class="tab-dot"></span>
+    CONCRETE
+  </button>
+  <button class="tab" data-project="neura" onclick="switchTab('neura')">
+    <span class="tab-dot"></span>
+    NEURA
   </button>
 </div>
 
@@ -918,6 +963,116 @@
   </div>
 </div>
 
+<!-- ===== CONCRETE ===== -->
+<div class="panel concrete" id="panel-concrete">
+  <div class="lookup-panel">
+    <div class="lookup-header" onclick="toggleLookup('concrete')">
+      <span>Search by address list</span>
+      <span class="lookup-active-badge" id="concrete-lookup-badge">active</span>
+      <span class="lookup-toggle" id="concrete-lookup-arrow">▼ expand</span>
+    </div>
+    <div class="lookup-body" id="concrete-lookup-body">
+      <textarea id="concrete-addr-input" placeholder="Paste addresses — one per line or separated by comma, space, semicolon"></textarea>
+      <div class="lookup-actions">
+        <button class="btn-apply" onclick="applyLookup('concrete')">Apply</button>
+        <button class="btn-clear" onclick="clearLookup('concrete')">Reset</button>
+        <span class="lookup-hint" id="concrete-lookup-hint"></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="cards" id="concrete-cards">
+    <div class="card"><div class="card-label">Total wallets</div><div class="card-value" id="concrete-c-total">—</div></div>
+    <div class="card"><div class="card-label">With points</div><div class="card-value" id="concrete-c-points">—</div></div>
+    <div class="card"><div class="card-label">Twitter</div><div class="card-value" id="concrete-c-twitter">—</div></div>
+    <div class="card"><div class="card-label">Discord</div><div class="card-value" id="concrete-c-discord">—</div></div>
+    <div class="card"><div class="card-label">With ReffCode</div><div class="card-value" id="concrete-c-ref">—</div></div>
+    <div class="card"><div class="card-label">ReffCode used</div><div class="card-value" id="concrete-c-refused">—</div></div>
+  </div>
+
+  <div class="controls">
+    <input type="text" id="concrete-search" placeholder="Search by address or ReffCode…" oninput="render('concrete')" />
+    <button class="filter-btn" id="concrete-f-twitter" onclick="toggleFilter('concrete','twitter')">Twitter ✓</button>
+    <button class="filter-btn" id="concrete-f-discord" onclick="toggleFilter('concrete','discord')">Discord ✓</button>
+    <button class="filter-btn" id="concrete-f-ref" onclick="toggleFilter('concrete','ref')">ReffCode ✓</button>
+    <button class="filter-btn" id="concrete-f-points" onclick="toggleFilter('concrete','points')">Points &gt; 0</button>
+    <span class="count-label" id="concrete-count-label"></span>
+    <a class="btn-csv" href="/api/concrete/csv" download>⬇ CSV</a>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th onclick="sortBy('concrete','address')">Address <span class="sort-icon" id="concrete-s-address"></span></th>
+          <th onclick="sortBy('concrete','points')">Points <span class="sort-icon" id="concrete-s-points">▼</span></th>
+          <th onclick="sortBy('concrete','rank')">Rank <span class="sort-icon" id="concrete-s-rank"></span></th>
+          <th onclick="sortBy('concrete','discord')">Discord <span class="sort-icon" id="concrete-s-discord"></span></th>
+          <th onclick="sortBy('concrete','twitter')">Twitter <span class="sort-icon" id="concrete-s-twitter"></span></th>
+          <th onclick="sortBy('concrete','refCode')">ReffCode <span class="sort-icon" id="concrete-s-refCode"></span></th>
+          <th onclick="sortBy('concrete','refCodeUsed')">ReffCode used <span class="sort-icon" id="concrete-s-refCodeUsed"></span></th>
+          <th onclick="sortBy('concrete','refferalsCount')">RefferalsCount <span class="sort-icon" id="concrete-s-refferalsCount"></span></th>
+        </tr>
+      </thead>
+      <tbody id="concrete-tbody"></tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ===== NEURA ===== -->
+<div class="panel neura" id="panel-neura">
+  <div class="lookup-panel">
+    <div class="lookup-header" onclick="toggleLookup('neura')">
+      <span>Search by address list</span>
+      <span class="lookup-active-badge" id="neura-lookup-badge">active</span>
+      <span class="lookup-toggle" id="neura-lookup-arrow">▼ expand</span>
+    </div>
+    <div class="lookup-body" id="neura-lookup-body">
+      <textarea id="neura-addr-input" placeholder="Paste addresses — one per line or separated by comma, space, semicolon"></textarea>
+      <div class="lookup-actions">
+        <button class="btn-apply" onclick="applyLookup('neura')">Apply</button>
+        <button class="btn-clear" onclick="clearLookup('neura')">Reset</button>
+        <span class="lookup-hint" id="neura-lookup-hint"></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="cards" id="neura-cards">
+    <div class="card"><div class="card-label">Total wallets</div><div class="card-value" id="neura-c-total">—</div></div>
+    <div class="card"><div class="card-label">With Neura Points</div><div class="card-value" id="neura-c-points">—</div></div>
+    <div class="card"><div class="card-label">Discord Linked</div><div class="card-value" id="neura-c-discord">—</div></div>
+    <div class="card"><div class="card-label">Twitter Linked</div><div class="card-value" id="neura-c-twitter">—</div></div>
+  </div>
+
+  <div class="controls">
+    <input type="text" id="neura-search" placeholder="Search by address…" oninput="render('neura')" />
+    <button class="filter-btn" id="neura-f-twitter" onclick="toggleFilter('neura','twitter')">Twitter Linked ✓</button>
+    <button class="filter-btn" id="neura-f-discord" onclick="toggleFilter('neura','discord')">Discord Linked ✓</button>
+    <button class="filter-btn" id="neura-f-points" onclick="toggleFilter('neura','points')">Neura Points &gt; 0</button>
+    <span class="count-label" id="neura-count-label"></span>
+    <a class="btn-csv" href="/api/neura/csv" download>⬇ CSV</a>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th onclick="sortBy('neura','address')">Address <span class="sort-icon" id="neura-s-address"></span></th>
+          <th onclick="sortBy('neura','neuraPoints')">Neura Points <span class="sort-icon" id="neura-s-neuraPoints">▼</span></th>
+          <th onclick="sortBy('neura','collectedPulses')">Collected Pulses <span class="sort-icon" id="neura-s-collectedPulses"></span></th>
+          <th onclick="sortBy('neura','tradingVolumeMonth')">Trading Volume: Month <span class="sort-icon" id="neura-s-tradingVolumeMonth"></span></th>
+          <th onclick="sortBy('neura','tradingVolumeAllTime')">Trading Volume: All Time <span class="sort-icon" id="neura-s-tradingVolumeAllTime"></span></th>
+          <th onclick="sortBy('neura','nativeBalance')">Native Balance <span class="sort-icon" id="neura-s-nativeBalance"></span></th>
+          <th onclick="sortBy('neura','sepoliaBalance')">Sepolia Balance <span class="sort-icon" id="neura-s-sepoliaBalance"></span></th>
+          <th onclick="sortBy('neura','discordLinked')">Discord Linked <span class="sort-icon" id="neura-s-discordLinked"></span></th>
+          <th onclick="sortBy('neura','twitterLinked')">Twitter Linked <span class="sort-icon" id="neura-s-twitterLinked"></span></th>
+        </tr>
+      </thead>
+      <tbody id="neura-tbody"></tbody>
+    </table>
+  </div>
+</div>
+
 <script>
   const state = {
     konnex: {
@@ -974,6 +1129,18 @@
       filters: { points: false },
       lookupSet: null, lookupList: [],
     },
+    concrete: {
+      rows: [],
+      sortKey: 'points', sortDir: -1,
+      filters: { twitter: false, discord: false, ref: false, points: false },
+      lookupSet: null, lookupList: [],
+    },
+    neura: {
+      rows: [],
+      sortKey: 'neuraPoints', sortDir: -1,
+      filters: { twitter: false, discord: false, points: false },
+      lookupSet: null, lookupList: [],
+    },
   };
 
   // Tab switching
@@ -983,7 +1150,7 @@
   }
 
   // ── Status bar ──────────────────────────────────────────────────────────────
-  let lastMtime = { konnex: 0, canopy: 0, zugchain: 0, xstocks: 0, permacast: 0, projectzero: 0, shelby: 0, surf: 0, truthtensor: 0 };
+  let lastMtime = { konnex: 0, canopy: 0, zugchain: 0, xstocks: 0, permacast: 0, projectzero: 0, shelby: 0, surf: 0, truthtensor: 0, concrete: 0, neura: 0 };
 
   function fmtTime(iso) {
     if (!iso) return "—";
@@ -992,7 +1159,7 @@
   }
 
   function updateStatusBar(status) {
-    for (const p of ["konnex", "canopy", "zugchain", "xstocks", "permacast", "projectzero", "shelby", "surf", "truthtensor"]) {
+    for (const p of ["konnex", "canopy", "zugchain", "xstocks", "permacast", "projectzero", "shelby", "surf", "truthtensor", "concrete", "neura"]) {
       const s = status[p];
       const dot  = document.getElementById(`${p}-dot`);
       const text = document.getElementById(`${p}-status-text`);
@@ -1009,6 +1176,8 @@
         p === "shelby" ? "Shelby" :
         p === "surf" ? "Surf AI" :
         p === "truthtensor" ? "Truthtensor" :
+        p === "concrete" ? "Concrete" :
+        p === "neura" ? "Neura" :
         p.charAt(0).toUpperCase() + p.slice(1);
       const warn  = s.truncated ? " ⚠ truncated" : "";
       dot.className = s.truncated ? "status-dot warn" : "status-dot";
@@ -1018,7 +1187,7 @@
 
   // ── Load data ────────────────────────────────────────────────────────────────
   async function loadAll() {
-    const [konnexData, canopyData, zugchainData, xstocksData, permacastData, projectZeroData, shelbyData, surfData, truthtensorData] = await Promise.all([
+    const [konnexData, canopyData, zugchainData, xstocksData, permacastData, projectZeroData, shelbyData, surfData, truthtensorData, concreteData, neuraData] = await Promise.all([
       fetch('/api/konnex').then(r => r.json()),
       fetch('/api/canopy').then(r => r.json()),
       fetch('/api/zugchain').then(r => r.json()),
@@ -1028,6 +1197,8 @@
       fetch('/api/shelby').then(r => r.json()),
       fetch('/api/surf').then(r => r.json()),
       fetch('/api/truthtensor').then(r => r.json()),
+      fetch('/api/concrete').then(r => r.json()),
+      fetch('/api/neura').then(r => r.json()),
     ]);
     state.konnex.rows = konnexData;
     state.canopy.rows = canopyData;
@@ -1038,6 +1209,8 @@
     state.shelby.rows = shelbyData;
     state.surf.rows = surfData;
     state.truthtensor.rows = truthtensorData;
+    state.concrete.rows = concreteData;
+    state.neura.rows = neuraData;
     updateCards('konnex');
     updateCards('canopy');
     updateCards('zugchain');
@@ -1047,6 +1220,8 @@
     updateCards('shelby');
     updateCards('surf');
     updateCards('truthtensor');
+    updateCards('concrete');
+    updateCards('neura');
     render('konnex');
     render('canopy');
     render('zugchain');
@@ -1056,6 +1231,8 @@
     render('shelby');
     render('surf');
     render('truthtensor');
+    render('concrete');
+    render('neura');
 
     // update status after loading
     try {
@@ -1070,6 +1247,8 @@
       lastMtime.shelby = status.shelby?.mtime || 0;
       lastMtime.surf = status.surf?.mtime || 0;
       lastMtime.truthtensor = status.truthtensor?.mtime || 0;
+      lastMtime.concrete = status.concrete?.mtime || 0;
+      lastMtime.neura = status.neura?.mtime || 0;
     } catch (_) {}
   }
 
@@ -1083,6 +1262,8 @@
     document.getElementById('shelby-status-text').textContent = 'Shelby: refreshing…';
     document.getElementById('surf-status-text').textContent = 'Surf AI: refreshing…';
     document.getElementById('truthtensor-status-text').textContent = 'Truthtensor: refreshing…';
+    document.getElementById('concrete-status-text').textContent = 'Concrete: refreshing…';
+    document.getElementById('neura-status-text').textContent = 'Neura: refreshing…';
     await loadAll();
   }
 
@@ -1099,7 +1280,9 @@
       const sStale = status.shelby?.stale || status.shelby?.mtime !== lastMtime.shelby;
       const sfStale = status.surf?.stale || status.surf?.mtime !== lastMtime.surf;
       const ttStale = status.truthtensor?.stale || status.truthtensor?.mtime !== lastMtime.truthtensor;
-      if (kStale || cStale || zStale || xStale || pStale || pzStale || sStale || sfStale || ttStale) {
+      const coStale = status.concrete?.stale || status.concrete?.mtime !== lastMtime.concrete;
+      const neStale = status.neura?.stale || status.neura?.mtime !== lastMtime.neura;
+      if (kStale || cStale || zStale || xStale || pStale || pzStale || sStale || sfStale || ttStale || coStale || neStale) {
         console.log("Files changed — reloading…");
         await loadAll();
       }
@@ -1120,7 +1303,7 @@
     const discordEl = document.getElementById(`${p}-c-discord`);
     if (discordEl) discordEl.textContent = rows.filter(r => r.discord).length;
 
-    if (p === 'konnex') {
+    if (p === 'konnex' || p === 'concrete') {
       const refEl = document.getElementById(`${p}-c-ref`);
       if (refEl) refEl.textContent = rows.filter(r => r.refCode !== '-').length;
       const refusedEl = document.getElementById(`${p}-c-refused`);
@@ -1152,6 +1335,11 @@
     }
     if (p === 'truthtensor') {
       if (pointsEl) pointsEl.textContent = rows.filter(r => r.agentsCount > 0).length;
+    }
+    if (p === 'neura') {
+      if (pointsEl) pointsEl.textContent = rows.filter(r => r.neuraPoints > 0).length;
+      if (twitterEl) twitterEl.textContent = rows.filter(r => r.twitterLinked).length;
+      if (discordEl) discordEl.textContent = rows.filter(r => r.discordLinked).length;
     }
   }
 
@@ -1229,8 +1417,18 @@
 
     const applyFilters = (rows) => rows.filter(r => {
       if (q && !r.address.toLowerCase().includes(q) && !(r.refCode || '').toLowerCase().includes(q) && !(r.xAccount || '').toLowerCase().includes(q) && !(r.inviteCode || '').toLowerCase().includes(q)) return false;
-      if (s.filters.twitter && !r.twitter && !(r.xAccount && r.xAccount !== '-')) return false;
-      if (s.filters.discord && !r.discord) return false;
+      if (s.filters.twitter) {
+        if (p === 'surf') {
+          if (!r.twitter && !(r.xAccount && r.xAccount !== '-')) return false;
+        } else if (p === 'neura') {
+          if (!r.twitterLinked) return false;
+        } else if (!r.twitter) return false;
+      }
+      if (s.filters.discord) {
+        if (p === 'neura') {
+          if (!r.discordLinked) return false;
+        } else if (!r.discord) return false;
+      }
       if (s.filters.ref) {
         if (p === 'projectzero') {
           if (!r.refCodeUsed) return false;
@@ -1241,7 +1439,7 @@
         }
       }
       if (s.filters.points) {
-        const metric = p === 'projectzero' ? r.gems : (p === 'shelby' ? r.uploadsCount : (p === 'surf' ? r.tasksCount : (p === 'truthtensor' ? r.agentsCount : r.points)));
+        const metric = p === 'projectzero' ? r.gems : (p === 'shelby' ? r.uploadsCount : (p === 'surf' ? r.tasksCount : (p === 'truthtensor' ? r.agentsCount : (p === 'neura' ? r.neuraPoints : r.points))));
         if (metric <= 0) return false;
       }
       return true;
@@ -1290,6 +1488,31 @@
         <td>${badge(r.refCodeUsed)}</td>
         <td>${badge(r.twitter)}</td>
         <td>${badge(r.discord)}</td>
+      </tr>`;
+    }
+    if (p === 'concrete') {
+      return `<tr>
+        <td class="addr">${r.address}</td>
+        <td class="points-val">${r.points}</td>
+        <td class="rank-val">${r.rank}</td>
+        <td>${badge(r.discord)}</td>
+        <td>${badge(r.twitter)}</td>
+        <td class="ref-code">${r.refCode}</td>
+        <td>${badge(r.refCodeUsed)}</td>
+        <td class="points-val">${r.refferalsCount ?? 0}</td>
+      </tr>`;
+    }
+    if (p === 'neura') {
+      return `<tr>
+        <td class="addr">${r.address}</td>
+        <td class="points-val">${r.neuraPoints}</td>
+        <td class="points-val">${r.collectedPulses}</td>
+        <td class="points-val">${r.tradingVolumeMonth}</td>
+        <td class="points-val">${r.tradingVolumeAllTime}</td>
+        <td class="points-val">${r.nativeBalance}</td>
+        <td class="points-val">${r.sepoliaBalance}</td>
+        <td>${badge(r.discordLinked)}</td>
+        <td>${badge(r.twitterLinked)}</td>
       </tr>`;
     }
     if (p === 'zugchain') {
