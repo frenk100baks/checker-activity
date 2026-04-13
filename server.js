@@ -18,8 +18,8 @@ function loadDbConfig() {
   if (!cfg || typeof cfg !== "object") {
     throw new Error("Invalid config.json: root must be an object");
   }
-  if (!cfg.konnexDbPath || !cfg.canopyDbPath || !cfg.zugChainDbPath || !cfg.xStocksDbPath || !cfg.permacastDbPath || !cfg.projectZeroDbPath || !cfg.shelbyDbPath || !cfg.surfDbPath || !cfg.truthtensorDbPath || !cfg.concreteDbPath || !cfg.neuraDbPath) {
-    throw new Error("config.json must contain konnexDbPath, canopyDbPath, zugChainDbPath, xStocksDbPath, permacastDbPath, projectZeroDbPath, shelbyDbPath, surfDbPath, truthtensorDbPath, concreteDbPath and neuraDbPath");
+  if (!cfg.konnexDbPath || !cfg.canopyDbPath || !cfg.zugChainDbPath || !cfg.xStocksDbPath || !cfg.permacastDbPath || !cfg.projectZeroDbPath || !cfg.shelbyDbPath || !cfg.surfDbPath || !cfg.truthtensorDbPath || !cfg.concreteDbPath || !cfg.neuraDbPath || !cfg.startaleDbPath) {
+    throw new Error("config.json must contain konnexDbPath, canopyDbPath, zugChainDbPath, xStocksDbPath, permacastDbPath, projectZeroDbPath, shelbyDbPath, surfDbPath, truthtensorDbPath, concreteDbPath, neuraDbPath and startaleDbPath");
   }
 
   return {
@@ -34,10 +34,11 @@ function loadDbConfig() {
     TRUTHTENSOR_DB: cfg.truthtensorDbPath,
     CONCRETE_DB: cfg.concreteDbPath,
     NEURA_DB: cfg.neuraDbPath,
+    STARTALE_DB: cfg.startaleDbPath,
   };
 }
 
-const { KONNEX_DB, CANOPY_DB, ZUGCHAIN_DB, XSTOCKS_DB, PERMACAST_DB, PROJECTZERO_DB, SHELBY_DB, SURF_DB, TRUTHTENSOR_DB, CONCRETE_DB, NEURA_DB } = loadDbConfig();
+const { KONNEX_DB, CANOPY_DB, ZUGCHAIN_DB, XSTOCKS_DB, PERMACAST_DB, PROJECTZERO_DB, SHELBY_DB, SURF_DB, TRUTHTENSOR_DB, CONCRETE_DB, NEURA_DB, STARTALE_DB } = loadDbConfig();
 
 // ─── Cache (mtime-based auto-reload) ──────────────────────────────────────────
 const cache = {
@@ -52,6 +53,7 @@ const cache = {
   truthtensor: { data: null, mtime: 0, count: 0, truncated: false, updatedAt: null },
   concrete: { data: null, mtime: 0, count: 0, truncated: false, updatedAt: null },
   neura: { data: null, mtime: 0, count: 0, truncated: false, updatedAt: null },
+  startale: { data: null, mtime: 0, count: 0, truncated: false, updatedAt: null },
 };
 
 // ─── Truncated JSON fix ────────────────────────────────────────────────────────
@@ -73,6 +75,27 @@ function loadJson(filePath) {
 }
 
 // ─── Parsers ───────────────────────────────────────────────────────────────────
+function pickSocialToken(info, kind) {
+  const isTw = kind === "twitter";
+  const direct = isTw
+    ? [
+        info.twiiterToken,
+        info.twitterToken,
+        info.twitter_token,
+        info["Twitter Token"],
+      ]
+    : [info.discordToken, info.discord_token, info["Discord Token"]];
+  for (const x of direct) {
+    if (x != null && String(x).trim() !== "") return String(x).trim();
+  }
+  const nested = isTw ? info.twitter : info.discord;
+  if (nested && typeof nested === "object" && nested.token != null) {
+    const t = String(nested.token).trim();
+    if (t) return t;
+  }
+  return "";
+}
+
 function parseKonnex(raw) {
   return Object.entries(raw).map(([address, info]) => ({
     address,
@@ -83,13 +106,15 @@ function parseKonnex(raw) {
     refCodeUsed: !!(info.refCodeUsed ?? info.ref_code_used ?? info.referralUsed ?? false),
     twitter:     !!(info.twitterConnected ?? info.twitter_connected ?? info.twitter ?? false),
     discord:     !!(info.discordConnected ?? info.discord_connected ?? info.discord ?? false),
+    twitterToken: pickSocialToken(info, "twitter"),
+    discordToken: pickSocialToken(info, "discord"),
   })).sort((a, b) => b.points - a.points);
 }
 
 function parseCanopy(raw) {
   return Object.entries(raw).map(([address, info]) => {
     let twitter = !!(info.twitterConnected ?? info.twitter_connected ?? false);
-    let discord = !!(info.discordConnected  ?? info.discord_connected ?? !!info.discordToken ?? false);
+    let discord = !!(info.discordConnected ?? info.discord_connected ?? false);
 
     // detect from loyalty transactions
     const txs = info.rewardsLoyaltyOverview?.transactions?.data;
@@ -107,6 +132,7 @@ function parseCanopy(raw) {
       rank:    info.rank   ?? 0,
       twitter,
       discord,
+      twitterToken: pickSocialToken(info, "twitter"),
     };
   }).sort((a, b) => b.points - a.points);
 }
@@ -131,6 +157,8 @@ function parseZugChain(raw) {
       info.twitter ??
       false
     ),
+    twitterToken: pickSocialToken(info, "twitter"),
+    discordToken: pickSocialToken(info, "discord"),
   })).sort((a, b) => b.points - a.points);
 }
 
@@ -270,6 +298,8 @@ function parseConcrete(raw) {
         info["RefferalsCount"] ??
         0
       ),
+      twitterToken: pickSocialToken(info, "twitter"),
+      discordToken: pickSocialToken(info, "discord"),
     };
   }).sort((a, b) => b.points - a.points);
 }
@@ -326,8 +356,47 @@ function parseNeura(raw) {
       ),
       discordLinked,
       twitterLinked,
+      twitterToken: pickSocialToken(info, "twitter"),
+      discordToken: pickSocialToken(info, "discord"),
     };
   }).sort((a, b) => b.neuraPoints - a.neuraPoints);
+}
+
+function parseStartale(raw) {
+  return Object.entries(raw).map(([address, info]) => {
+    const rawRef =
+      info.refCode ??
+      info.reffCode ??
+      info.reffcode ??
+      info["reffcode"] ??
+      info.ReffCode;
+    const refCode =
+      rawRef != null && String(rawRef).trim() !== ""
+        ? String(rawRef).trim()
+        : "-";
+
+    const usedRaw =
+      info.refCodeUsed ??
+      info.reffCodeUsed ??
+      info.reffcodeUsed ??
+      info.reffcode_used ??
+      info["ReffCode Used"] ??
+      info["reffcode used"] ??
+      false;
+
+    const refCodeUsed =
+      usedRaw === true ||
+      usedRaw === 1 ||
+      String(usedRaw).toLowerCase() === "true";
+
+    return {
+      address,
+      points: Number(info.points ?? 0),
+      rank: Number(info.rank ?? 0),
+      refCode,
+      refCodeUsed,
+    };
+  }).sort((a, b) => b.points - a.points);
 }
 
 // ─── Cache accessor ────────────────────────────────────────────────────────────
@@ -355,12 +424,18 @@ function getOrParse(project, filePath, parseFn) {
 
 // ─── CSV helper ────────────────────────────────────────────────────────────────
 function toCsv(rows, fields) {
+  const escCell = (s) => {
+    const t = String(s);
+    if (t.includes(",") || t.includes('"') || t.includes("\n") || t.includes("\r")) {
+      return `"${t.replace(/"/g, '""')}"`;
+    }
+    return t;
+  };
   const lines = rows.map(r =>
     fields.map(f => {
       const v = r[f];
       if (v === undefined || v === null) return "";
-      const s = String(v);
-      return s.includes(",") ? `"${s}"` : s;
+      return escCell(v);
     }).join(",")
   );
   return [fields.join(","), ...lines].join("\n");
@@ -433,10 +508,15 @@ const server = http.createServer((req, res) => {
       return respond(200, "application/json", JSON.stringify(data));
     }
 
+    if (req.url === "/api/startale") {
+      const { data } = getOrParse("startale", STARTALE_DB, parseStartale);
+      return respond(200, "application/json", JSON.stringify(data));
+    }
+
     // ── CSV download
     if (req.url === "/api/konnex/csv") {
       const { data } = getOrParse("konnex", KONNEX_DB, parseKonnex);
-      const csv = toCsv(data, ["address", "points", "rank", "refCode", "refCodeUsed", "twitter", "discord"]);
+      const csv = toCsv(data, ["address", "points", "rank", "refCode", "refCodeUsed", "twitter", "discord", "twitterToken", "discordToken"]);
       res.writeHead(200, {
         "Content-Type": "text/csv; charset=utf-8",
         "Content-Disposition": `attachment; filename="konnex_${Date.now()}.csv"`,
@@ -446,7 +526,7 @@ const server = http.createServer((req, res) => {
 
     if (req.url === "/api/canopy/csv") {
       const { data } = getOrParse("canopy", CANOPY_DB, parseCanopy);
-      const csv = toCsv(data, ["address", "points", "rank", "twitter", "discord"]);
+      const csv = toCsv(data, ["address", "points", "rank", "twitter", "discord", "twitterToken"]);
       res.writeHead(200, {
         "Content-Type": "text/csv; charset=utf-8",
         "Content-Disposition": `attachment; filename="canopy_${Date.now()}.csv"`,
@@ -456,7 +536,7 @@ const server = http.createServer((req, res) => {
 
     if (req.url === "/api/zugchain/csv") {
       const { data } = getOrParse("zugchain", ZUGCHAIN_DB, parseZugChain);
-      const csv = toCsv(data, ["address", "points", "rank", "nativeBalance", "twitter"]);
+      const csv = toCsv(data, ["address", "points", "rank", "nativeBalance", "twitter", "twitterToken", "discordToken"]);
       res.writeHead(200, {
         "Content-Type": "text/csv; charset=utf-8",
         "Content-Disposition": `attachment; filename="zugchain_${Date.now()}.csv"`,
@@ -526,7 +606,7 @@ const server = http.createServer((req, res) => {
 
     if (req.url === "/api/concrete/csv") {
       const { data } = getOrParse("concrete", CONCRETE_DB, parseConcrete);
-      const csv = toCsv(data, ["address", "points", "rank", "discord", "twitter", "refCode", "refCodeUsed", "refferalsCount"]);
+      const csv = toCsv(data, ["address", "points", "rank", "discord", "twitter", "refCode", "refCodeUsed", "refferalsCount", "twitterToken", "discordToken"]);
       res.writeHead(200, {
         "Content-Type": "text/csv; charset=utf-8",
         "Content-Disposition": `attachment; filename="concrete_${Date.now()}.csv"`,
@@ -546,10 +626,22 @@ const server = http.createServer((req, res) => {
         "sepoliaBalance",
         "discordLinked",
         "twitterLinked",
+        "twitterToken",
+        "discordToken",
       ]);
       res.writeHead(200, {
         "Content-Type": "text/csv; charset=utf-8",
         "Content-Disposition": `attachment; filename="neura_${Date.now()}.csv"`,
+      });
+      return res.end(csv);
+    }
+
+    if (req.url === "/api/startale/csv") {
+      const { data } = getOrParse("startale", STARTALE_DB, parseStartale);
+      const csv = toCsv(data, ["address", "points", "rank", "refCode", "refCodeUsed"]);
+      res.writeHead(200, {
+        "Content-Type": "text/csv; charset=utf-8",
+        "Content-Disposition": `attachment; filename="startale_${Date.now()}.csv"`,
       });
       return res.end(csv);
     }
@@ -569,6 +661,7 @@ const server = http.createServer((req, res) => {
         ["truthtensor", TRUTHTENSOR_DB],
         ["concrete", CONCRETE_DB],
         ["neura", NEURA_DB],
+        ["startale", STARTALE_DB],
       ]) {
         try {
           const stat = fs.statSync(filePath);
@@ -633,6 +726,7 @@ server.listen(PORT, () => {
   printLine("Truthtensor DB", TRUTHTENSOR_DB);
   printLine("Concrete DB", CONCRETE_DB);
   printLine("Neura DB", NEURA_DB);
+  printLine("Startale DB", STARTALE_DB);
   console.log("");
   console.log("  Auto-reload is enabled on file changes.");
   console.log("");

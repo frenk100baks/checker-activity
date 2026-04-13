@@ -71,6 +71,7 @@
     .tab[data-project="truthtensor"] .tab-dot { background: #93c5fd; }
     .tab[data-project="concrete"] .tab-dot { background: #f59e0b; }
     .tab[data-project="neura"] .tab-dot { background: #a855f7; }
+    .tab[data-project="startale"] .tab-dot { background: #14b8a6; }
 
     /* Panel */
     .panel { display: none; }
@@ -112,6 +113,7 @@
     .truthtensor .card-value { color: #93c5fd; }
     .concrete .card-value { color: #f59e0b; }
     .neura .card-value { color: #a855f7; }
+    .startale .card-value { color: #14b8a6; }
 
     /* Lookup panel */
     .lookup-panel {
@@ -139,6 +141,7 @@
     .truthtensor .lookup-header span { color: #93c5fd; }
     .concrete .lookup-header span { color: #f59e0b; }
     .neura .lookup-header span { color: #a855f7; }
+    .startale .lookup-header span { color: #14b8a6; }
     .lookup-toggle { margin-left: auto; font-size: 0.75rem; color: #718096; }
     .lookup-body { display: none; margin-top: 12px; }
     .lookup-body.open { display: block; }
@@ -167,6 +170,7 @@
     .truthtensor textarea:focus { border-color: #93c5fd; }
     .concrete textarea:focus { border-color: #f59e0b; }
     .neura textarea:focus { border-color: #a855f7; }
+    .startale textarea:focus { border-color: #14b8a6; }
     textarea::placeholder { color: #4a5568; font-family: 'Segoe UI', sans-serif; font-size: 0.82rem; }
     .lookup-actions {
       display: flex;
@@ -195,6 +199,7 @@
     .truthtensor .btn-apply { background: #93c5fd; }
     .concrete .btn-apply { background: #f59e0b; }
     .neura .btn-apply { background: #a855f7; }
+    .startale .btn-apply { background: #14b8a6; }
     .btn-apply:hover { opacity: 0.85; }
     .btn-clear {
       background: transparent;
@@ -222,6 +227,7 @@
     .projectzero .lookup-active-badge { background: #22d3ee22; border: 1px solid #22d3ee; color: #22d3ee; }
     .concrete .lookup-active-badge { background: #f59e0b22; border: 1px solid #f59e0b; color: #f59e0b; }
     .neura .lookup-active-badge { background: #a855f722; border: 1px solid #a855f7; color: #a855f7; }
+    .startale .lookup-active-badge { background: #14b8a622; border: 1px solid #14b8a6; color: #14b8a6; }
 
     /* Controls */
     .controls {
@@ -253,6 +259,7 @@
     .truthtensor input[type="text"]:focus { border-color: #93c5fd; }
     .concrete input[type="text"]:focus { border-color: #f59e0b; }
     .neura input[type="text"]:focus { border-color: #a855f7; }
+    .startale input[type="text"]:focus { border-color: #14b8a6; }
     input[type="text"]::placeholder { color: #4a5568; }
 
     .filter-btn {
@@ -295,6 +302,9 @@
     .neura .filter-btn:hover,
     .neura .filter-btn.active { border-color: #a855f7; color: #a855f7; }
     .neura .filter-btn.active { background: #a855f722; }
+    .startale .filter-btn:hover,
+    .startale .filter-btn.active { border-color: #14b8a6; color: #14b8a6; }
+    .startale .filter-btn.active { background: #14b8a622; }
 
     .count-label { margin-left: auto; font-size: 0.82rem; color: #718096; }
 
@@ -331,6 +341,7 @@
     .truthtensor th:hover, .truthtensor th.sorted { color: #93c5fd; }
     .concrete th:hover, .concrete th.sorted { color: #f59e0b; }
     .neura th:hover, .neura th.sorted { color: #a855f7; }
+    .startale th:hover, .startale th.sorted { color: #14b8a6; }
     th .sort-icon { margin-left: 4px; opacity: 0.5; }
     th.sorted .sort-icon { opacity: 1; }
     tbody tr { border-bottom: 1px solid #1a202c; transition: background 0.1s; }
@@ -350,6 +361,7 @@
     .badge-yes { background: #22543d44; color: #68d391; border: 1px solid #276749; }
     .badge-no  { background: #742a2a22; color: #fc8181; border: 1px solid #742a2a; }
     .ref-code { font-family: monospace; font-size: 0.78rem; color: #b794f4; }
+    .token-cell { font-family: monospace; font-size: 0.72rem; max-width: 14rem; word-break: break-all; color: #9ca3af; }
     .no-data { text-align: center; padding: 40px; color: #4a5568; }
     .not-found-row td { color: #fc8181; font-size: 0.78rem; font-style: italic; }
 
@@ -412,6 +424,7 @@
     .truthtensor .btn-csv:hover { border-color: #93c5fd; color: #93c5fd; }
     .concrete .btn-csv:hover { border-color: #f59e0b; color: #f59e0b; }
     .neura .btn-csv:hover { border-color: #a855f7; color: #a855f7; }
+    .startale .btn-csv:hover { border-color: #14b8a6; color: #14b8a6; }
   </style>
 </head>
 <body>
@@ -472,6 +485,11 @@
     <span class="status-dot" id="neura-dot"></span>
     <span id="neura-status-text">Neura: loading…</span>
   </div>
+  <span class="status-sep">|</span>
+  <div class="status-item">
+    <span class="status-dot" id="startale-dot"></span>
+    <span id="startale-status-text">Startale: loading…</span>
+  </div>
   <button class="btn-refresh" onclick="reloadAll()" title="Re-read files from disk">⟳ Refresh</button>
 </div>
 
@@ -519,6 +537,10 @@
   <button class="tab" data-project="neura" onclick="switchTab('neura')">
     <span class="tab-dot"></span>
     NEURA
+  </button>
+  <button class="tab" data-project="startale" onclick="switchTab('startale')">
+    <span class="tab-dot"></span>
+    STARTALE
   </button>
 </div>
 
@@ -571,6 +593,8 @@
           <th onclick="sortBy('konnex','refCodeUsed')">Ref used <span class="sort-icon" id="konnex-s-refCodeUsed"></span></th>
           <th onclick="sortBy('konnex','twitter')">Twitter <span class="sort-icon" id="konnex-s-twitter"></span></th>
           <th onclick="sortBy('konnex','discord')">Discord <span class="sort-icon" id="konnex-s-discord"></span></th>
+          <th onclick="sortBy('konnex','twitterToken')">Twitter Token <span class="sort-icon" id="konnex-s-twitterToken"></span></th>
+          <th onclick="sortBy('konnex','discordToken')">Discord Token <span class="sort-icon" id="konnex-s-discordToken"></span></th>
         </tr>
       </thead>
       <tbody id="konnex-tbody"></tbody>
@@ -622,6 +646,7 @@
           <th onclick="sortBy('canopy','rank')">Rank <span class="sort-icon" id="canopy-s-rank"></span></th>
           <th onclick="sortBy('canopy','twitter')">Twitter <span class="sort-icon" id="canopy-s-twitter"></span></th>
           <th onclick="sortBy('canopy','discord')">Discord <span class="sort-icon" id="canopy-s-discord"></span></th>
+          <th onclick="sortBy('canopy','twitterToken')">Twitter Token <span class="sort-icon" id="canopy-s-twitterToken"></span></th>
         </tr>
       </thead>
       <tbody id="canopy-tbody"></tbody>
@@ -672,6 +697,8 @@
           <th onclick="sortBy('zugchain','rank')">Rank <span class="sort-icon" id="zugchain-s-rank"></span></th>
           <th onclick="sortBy('zugchain','nativeBalance')">Native Balance <span class="sort-icon" id="zugchain-s-nativeBalance"></span></th>
           <th onclick="sortBy('zugchain','twitter')">TwitterConnected <span class="sort-icon" id="zugchain-s-twitter"></span></th>
+          <th onclick="sortBy('zugchain','twitterToken')">Twitter Token <span class="sort-icon" id="zugchain-s-twitterToken"></span></th>
+          <th onclick="sortBy('zugchain','discordToken')">Discord Token <span class="sort-icon" id="zugchain-s-discordToken"></span></th>
         </tr>
       </thead>
       <tbody id="zugchain-tbody"></tbody>
@@ -1012,6 +1039,8 @@
           <th onclick="sortBy('concrete','refCode')">ReffCode <span class="sort-icon" id="concrete-s-refCode"></span></th>
           <th onclick="sortBy('concrete','refCodeUsed')">ReffCode used <span class="sort-icon" id="concrete-s-refCodeUsed"></span></th>
           <th onclick="sortBy('concrete','refferalsCount')">RefferalsCount <span class="sort-icon" id="concrete-s-refferalsCount"></span></th>
+          <th onclick="sortBy('concrete','twitterToken')">Twitter Token <span class="sort-icon" id="concrete-s-twitterToken"></span></th>
+          <th onclick="sortBy('concrete','discordToken')">Discord Token <span class="sort-icon" id="concrete-s-discordToken"></span></th>
         </tr>
       </thead>
       <tbody id="concrete-tbody"></tbody>
@@ -1066,9 +1095,60 @@
           <th onclick="sortBy('neura','sepoliaBalance')">Sepolia Balance <span class="sort-icon" id="neura-s-sepoliaBalance"></span></th>
           <th onclick="sortBy('neura','discordLinked')">Discord Linked <span class="sort-icon" id="neura-s-discordLinked"></span></th>
           <th onclick="sortBy('neura','twitterLinked')">Twitter Linked <span class="sort-icon" id="neura-s-twitterLinked"></span></th>
+          <th onclick="sortBy('neura','twitterToken')">Twitter Token <span class="sort-icon" id="neura-s-twitterToken"></span></th>
+          <th onclick="sortBy('neura','discordToken')">Discord Token <span class="sort-icon" id="neura-s-discordToken"></span></th>
         </tr>
       </thead>
       <tbody id="neura-tbody"></tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ===== STARTALE ===== -->
+<div class="panel startale" id="panel-startale">
+  <div class="lookup-panel">
+    <div class="lookup-header" onclick="toggleLookup('startale')">
+      <span>Search by address list</span>
+      <span class="lookup-active-badge" id="startale-lookup-badge">active</span>
+      <span class="lookup-toggle" id="startale-lookup-arrow">▼ expand</span>
+    </div>
+    <div class="lookup-body" id="startale-lookup-body">
+      <textarea id="startale-addr-input" placeholder="Paste addresses — one per line or separated by comma, space, semicolon"></textarea>
+      <div class="lookup-actions">
+        <button class="btn-apply" onclick="applyLookup('startale')">Apply</button>
+        <button class="btn-clear" onclick="clearLookup('startale')">Reset</button>
+        <span class="lookup-hint" id="startale-lookup-hint"></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="cards" id="startale-cards">
+    <div class="card"><div class="card-label">Total wallets</div><div class="card-value" id="startale-c-total">—</div></div>
+    <div class="card"><div class="card-label">With points</div><div class="card-value" id="startale-c-points">—</div></div>
+    <div class="card"><div class="card-label">With Reff code</div><div class="card-value" id="startale-c-ref">—</div></div>
+    <div class="card"><div class="card-label">Reff code used</div><div class="card-value" id="startale-c-refused">—</div></div>
+  </div>
+
+  <div class="controls">
+    <input type="text" id="startale-search" placeholder="Search by address or Reff code…" oninput="render('startale')" />
+    <button class="filter-btn" id="startale-f-ref" onclick="toggleFilter('startale','ref')">Reff code ✓</button>
+    <button class="filter-btn" id="startale-f-points" onclick="toggleFilter('startale','points')">Points &gt; 0</button>
+    <span class="count-label" id="startale-count-label"></span>
+    <a class="btn-csv" href="/api/startale/csv" download>⬇ CSV</a>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th onclick="sortBy('startale','address')">Address <span class="sort-icon" id="startale-s-address"></span></th>
+          <th onclick="sortBy('startale','points')">Points <span class="sort-icon" id="startale-s-points">▼</span></th>
+          <th onclick="sortBy('startale','rank')">Rank <span class="sort-icon" id="startale-s-rank"></span></th>
+          <th onclick="sortBy('startale','refCode')">Reff code <span class="sort-icon" id="startale-s-refCode"></span></th>
+          <th onclick="sortBy('startale','refCodeUsed')">Reff code used <span class="sort-icon" id="startale-s-refCodeUsed"></span></th>
+        </tr>
+      </thead>
+      <tbody id="startale-tbody"></tbody>
     </table>
   </div>
 </div>
@@ -1141,6 +1221,12 @@
       filters: { twitter: false, discord: false, points: false },
       lookupSet: null, lookupList: [],
     },
+    startale: {
+      rows: [],
+      sortKey: 'points', sortDir: -1,
+      filters: { ref: false, points: false },
+      lookupSet: null, lookupList: [],
+    },
   };
 
   // Tab switching
@@ -1150,7 +1236,7 @@
   }
 
   // ── Status bar ──────────────────────────────────────────────────────────────
-  let lastMtime = { konnex: 0, canopy: 0, zugchain: 0, xstocks: 0, permacast: 0, projectzero: 0, shelby: 0, surf: 0, truthtensor: 0, concrete: 0, neura: 0 };
+  let lastMtime = { konnex: 0, canopy: 0, zugchain: 0, xstocks: 0, permacast: 0, projectzero: 0, shelby: 0, surf: 0, truthtensor: 0, concrete: 0, neura: 0, startale: 0 };
 
   function fmtTime(iso) {
     if (!iso) return "—";
@@ -1159,7 +1245,7 @@
   }
 
   function updateStatusBar(status) {
-    for (const p of ["konnex", "canopy", "zugchain", "xstocks", "permacast", "projectzero", "shelby", "surf", "truthtensor", "concrete", "neura"]) {
+    for (const p of ["konnex", "canopy", "zugchain", "xstocks", "permacast", "projectzero", "shelby", "surf", "truthtensor", "concrete", "neura", "startale"]) {
       const s = status[p];
       const dot  = document.getElementById(`${p}-dot`);
       const text = document.getElementById(`${p}-status-text`);
@@ -1178,6 +1264,7 @@
         p === "truthtensor" ? "Truthtensor" :
         p === "concrete" ? "Concrete" :
         p === "neura" ? "Neura" :
+        p === "startale" ? "Startale" :
         p.charAt(0).toUpperCase() + p.slice(1);
       const warn  = s.truncated ? " ⚠ truncated" : "";
       dot.className = s.truncated ? "status-dot warn" : "status-dot";
@@ -1187,7 +1274,7 @@
 
   // ── Load data ────────────────────────────────────────────────────────────────
   async function loadAll() {
-    const [konnexData, canopyData, zugchainData, xstocksData, permacastData, projectZeroData, shelbyData, surfData, truthtensorData, concreteData, neuraData] = await Promise.all([
+    const [konnexData, canopyData, zugchainData, xstocksData, permacastData, projectZeroData, shelbyData, surfData, truthtensorData, concreteData, neuraData, startaleData] = await Promise.all([
       fetch('/api/konnex').then(r => r.json()),
       fetch('/api/canopy').then(r => r.json()),
       fetch('/api/zugchain').then(r => r.json()),
@@ -1199,6 +1286,7 @@
       fetch('/api/truthtensor').then(r => r.json()),
       fetch('/api/concrete').then(r => r.json()),
       fetch('/api/neura').then(r => r.json()),
+      fetch('/api/startale').then(r => r.json()),
     ]);
     state.konnex.rows = konnexData;
     state.canopy.rows = canopyData;
@@ -1211,6 +1299,7 @@
     state.truthtensor.rows = truthtensorData;
     state.concrete.rows = concreteData;
     state.neura.rows = neuraData;
+    state.startale.rows = startaleData;
     updateCards('konnex');
     updateCards('canopy');
     updateCards('zugchain');
@@ -1222,6 +1311,7 @@
     updateCards('truthtensor');
     updateCards('concrete');
     updateCards('neura');
+    updateCards('startale');
     render('konnex');
     render('canopy');
     render('zugchain');
@@ -1233,6 +1323,7 @@
     render('truthtensor');
     render('concrete');
     render('neura');
+    render('startale');
 
     // update status after loading
     try {
@@ -1249,6 +1340,7 @@
       lastMtime.truthtensor = status.truthtensor?.mtime || 0;
       lastMtime.concrete = status.concrete?.mtime || 0;
       lastMtime.neura = status.neura?.mtime || 0;
+      lastMtime.startale = status.startale?.mtime || 0;
     } catch (_) {}
   }
 
@@ -1264,6 +1356,7 @@
     document.getElementById('truthtensor-status-text').textContent = 'Truthtensor: refreshing…';
     document.getElementById('concrete-status-text').textContent = 'Concrete: refreshing…';
     document.getElementById('neura-status-text').textContent = 'Neura: refreshing…';
+    document.getElementById('startale-status-text').textContent = 'Startale: refreshing…';
     await loadAll();
   }
 
@@ -1282,7 +1375,8 @@
       const ttStale = status.truthtensor?.stale || status.truthtensor?.mtime !== lastMtime.truthtensor;
       const coStale = status.concrete?.stale || status.concrete?.mtime !== lastMtime.concrete;
       const neStale = status.neura?.stale || status.neura?.mtime !== lastMtime.neura;
-      if (kStale || cStale || zStale || xStale || pStale || pzStale || sStale || sfStale || ttStale || coStale || neStale) {
+      const stStale = status.startale?.stale || status.startale?.mtime !== lastMtime.startale;
+      if (kStale || cStale || zStale || xStale || pStale || pzStale || sStale || sfStale || ttStale || coStale || neStale || stStale) {
         console.log("Files changed — reloading…");
         await loadAll();
       }
@@ -1303,7 +1397,7 @@
     const discordEl = document.getElementById(`${p}-c-discord`);
     if (discordEl) discordEl.textContent = rows.filter(r => r.discord).length;
 
-    if (p === 'konnex' || p === 'concrete') {
+    if (p === 'konnex' || p === 'concrete' || p === 'startale') {
       const refEl = document.getElementById(`${p}-c-ref`);
       if (refEl) refEl.textContent = rows.filter(r => r.refCode !== '-').length;
       const refusedEl = document.getElementById(`${p}-c-refused`);
@@ -1396,7 +1490,7 @@
       s.sortDir *= -1;
     } else {
       s.sortKey = key;
-      s.sortDir = (key === 'address' || key === 'refCode') ? 1 : -1;
+      s.sortDir = (key === 'address' || key === 'refCode' || key === 'twitterToken' || key === 'discordToken') ? 1 : -1;
     }
     // Update icons
     document.querySelectorAll(`#panel-${p} th`).forEach(th => th.classList.remove('sorted'));
@@ -1416,7 +1510,7 @@
     const tbody = document.getElementById(`${p}-tbody`);
 
     const applyFilters = (rows) => rows.filter(r => {
-      if (q && !r.address.toLowerCase().includes(q) && !(r.refCode || '').toLowerCase().includes(q) && !(r.xAccount || '').toLowerCase().includes(q) && !(r.inviteCode || '').toLowerCase().includes(q)) return false;
+      if (q && !r.address.toLowerCase().includes(q) && !(r.refCode || '').toLowerCase().includes(q) && !(r.xAccount || '').toLowerCase().includes(q) && !(r.inviteCode || '').toLowerCase().includes(q) && !(String(r.twitterToken || '').toLowerCase().includes(q)) && !(String(r.discordToken || '').toLowerCase().includes(q))) return false;
       if (s.filters.twitter) {
         if (p === 'surf') {
           if (!r.twitter && !(r.xAccount && r.xAccount !== '-')) return false;
@@ -1465,9 +1559,9 @@
         `Found: ${found.length} · Not found: ${missing.length} · Shown: ${filtered.length}`;
       const rows_html = filtered.map(r => rowHtml(p, r)).join('');
       const miss_html = missing.map(addr =>
-        `<tr class="not-found-row"><td class="addr">${addr}</td><td colspan="10">— not found in database</td></tr>`
+        `<tr class="not-found-row"><td class="addr">${addr}</td><td colspan="20">— not found in database</td></tr>`
       ).join('');
-      tbody.innerHTML = (rows_html || `<tr><td class="no-data" colspan="10">No results found</td></tr>`) + miss_html;
+      tbody.innerHTML = (rows_html || `<tr><td class="no-data" colspan="20">No results found</td></tr>`) + miss_html;
       return;
     }
 
@@ -1475,7 +1569,14 @@
     document.getElementById(`${p}-count-label`).textContent = `Shown: ${rows.length} / ${s.rows.length}`;
     tbody.innerHTML = rows.length
       ? rows.map(r => rowHtml(p, r)).join('')
-      : `<tr><td class="no-data" colspan="10">No results found</td></tr>`;
+      : `<tr><td class="no-data" colspan="20">No results found</td></tr>`;
+  }
+
+  function escHtml(s) {
+    return String(s ?? "")
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/"/g, "&quot;");
   }
 
   function rowHtml(p, r) {
@@ -1488,6 +1589,17 @@
         <td>${badge(r.refCodeUsed)}</td>
         <td>${badge(r.twitter)}</td>
         <td>${badge(r.discord)}</td>
+        <td class="token-cell">${escHtml(r.twitterToken)}</td>
+        <td class="token-cell">${escHtml(r.discordToken)}</td>
+      </tr>`;
+    }
+    if (p === 'startale') {
+      return `<tr>
+        <td class="addr">${r.address}</td>
+        <td class="points-val">${r.points}</td>
+        <td class="rank-val">${r.rank}</td>
+        <td class="ref-code">${r.refCode}</td>
+        <td>${badge(r.refCodeUsed)}</td>
       </tr>`;
     }
     if (p === 'concrete') {
@@ -1500,6 +1612,8 @@
         <td class="ref-code">${r.refCode}</td>
         <td>${badge(r.refCodeUsed)}</td>
         <td class="points-val">${r.refferalsCount ?? 0}</td>
+        <td class="token-cell">${escHtml(r.twitterToken)}</td>
+        <td class="token-cell">${escHtml(r.discordToken)}</td>
       </tr>`;
     }
     if (p === 'neura') {
@@ -1513,6 +1627,8 @@
         <td class="points-val">${r.sepoliaBalance}</td>
         <td>${badge(r.discordLinked)}</td>
         <td>${badge(r.twitterLinked)}</td>
+        <td class="token-cell">${escHtml(r.twitterToken)}</td>
+        <td class="token-cell">${escHtml(r.discordToken)}</td>
       </tr>`;
     }
     if (p === 'zugchain') {
@@ -1522,6 +1638,8 @@
         <td class="rank-val">${r.rank}</td>
         <td class="points-val">${r.nativeBalance ?? 0}</td>
         <td>${badge(r.twitter)}</td>
+        <td class="token-cell">${escHtml(r.twitterToken)}</td>
+        <td class="token-cell">${escHtml(r.discordToken)}</td>
       </tr>`;
     }
     if (p === 'xstocks') {
@@ -1572,6 +1690,7 @@
         <td class="rank-val">${r.rank}</td>
         <td>${badge(r.twitter)}</td>
         <td>${badge(r.discord)}</td>
+        <td class="token-cell">${escHtml(r.twitterToken)}</td>
       </tr>`;
     }
   }

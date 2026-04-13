@@ -1,6 +1,6 @@
 # CheckerActivity
 
-Dashboard for monitoring wallet activity across **eleven** integrated modules. Each module reads a separate `db.json` file; paths are set in `config.json` (see [Setup](#setup-and-run-english-guide)).
+Dashboard for monitoring wallet activity across **twelve** integrated modules. Each module reads a separate `db.json` file; paths are set in `config.json` (see [Setup](#setup-and-run-english-guide)).
 
 **Special for Gentleman community:** [https://t.me/byGentleman_bot?start=ref5561204288](https://t.me/byGentleman_bot?start=ref5561204288)
 
@@ -8,23 +8,24 @@ Dashboard for monitoring wallet activity across **eleven** integrated modules. E
 
 | Module | Config key | API base | Highlights (UI / CSV) |
 |--------|------------|----------|-------------------------|
-| **Konnex** | `konnexDbPath` | `/api/konnex` | Points, rank, ref code, Twitter / Discord, ref used |
-| **Canopy** | `canopyDbPath` | `/api/canopy` | Points, rank, Twitter, Discord |
-| **ZugChain** | `zugChainDbPath` | `/api/zugchain` | XP, rank, **Native Balance**, TwitterConnected |
+| **Konnex** | `konnexDbPath` | `/api/konnex` | Points, rank, ref code, Twitter / Discord, Twitter Token / Discord Token, ref used |
+| **Canopy** | `canopyDbPath` | `/api/canopy` | Points, rank, Twitter, Discord, Twitter Token |
+| **ZugChain** | `zugChainDbPath` | `/api/zugchain` | XP, rank, **Native Balance**, TwitterConnected, Twitter Token / Discord Token |
 | **XStocks** | `xStocksDbPath` | `/api/xstocks` | Points, ReffCode, registered |
 | **Permacast** | `permacastDbPath` | `/api/permacast` | Points, rank, Twitter, Discord |
 | **ProjectZero** | `projectZeroDbPath` | `/api/projectzero` | Gems, streak, ReffCode used |
 | **Shelby** | `shelbyDbPath` | `/api/shelby` | Address, upload count |
 | **Surf AI** | `surfDbPath` | `/api/surf` | X account, task count, invite code |
 | **Truthtensor** | `truthtensorDbPath` | `/api/truthtensor` | Address, agents count |
-| **Concrete** | `concreteDbPath` | `/api/concrete` | Points, rank, Twitter / Discord, ReffCode, ReffCode used, referrals count |
-| **Neura** | `neuraDbPath` | `/api/neura` | Neura points, pulses, trading volumes, native / Sepolia balance, Discord / Twitter linked |
+| **Concrete** | `concreteDbPath` | `/api/concrete` | Points, rank, Twitter / Discord, Twitter Token / Discord Token, ReffCode, ReffCode used, referrals count |
+| **Neura** | `neuraDbPath` | `/api/neura` | Neura points, pulses, trading volumes, native / Sepolia balance, Discord / Twitter linked, Twitter Token / Discord Token |
+| **Startale** | `startaleDbPath` | `/api/startale` | Points, rank, Reff code, Reff code used |
 
 CSV for each module: append `/csv` to the same path (e.g. `GET /api/neura/csv`).
 
 ## Features
 
-- **Eleven-tab UI** — one tab per module; switch to compare projects side by side in the same layout
+- **Twelve-tab UI** — one tab per module; switch to compare projects side by side in the same layout
 - **Auto-reload** — polls file metadata every 5 seconds and reloads when `db.json` changes
 - **Address lookup** — paste many addresses; order is preserved when matching
 - **Filters & search** — per module (points/XP, Twitter, Discord, ref codes, etc., where applicable)
@@ -80,6 +81,7 @@ Then edit `config.json` and set absolute paths to your local module files:
 - `truthtensorDbPath`
 - `concreteDbPath`
 - `neuraDbPath`
+- `startaleDbPath`
 
 Example (`config.example.json`):
 
@@ -95,7 +97,8 @@ Example (`config.example.json`):
   "surfDbPath": "D:\\path\\to\\Surf\\db.json",
   "truthtensorDbPath": "D:\\path\\to\\Truthtensor\\db.json",
   "concreteDbPath": "D:\\path\\to\\Concrete\\db.json",
-  "neuraDbPath": "D:\\path\\to\\Neura\\db.json"
+  "neuraDbPath": "D:\\path\\to\\Neura\\db.json",
+  "startaleDbPath": "D:\\Maxi\\modules\\StartaleMastery\\db.json"
 }
 ```
 
@@ -145,6 +148,7 @@ Windows alternative:
 | `GET /api/truthtensor` | Truthtensor wallet data (JSON) |
 | `GET /api/concrete` | Concrete wallet data (JSON) |
 | `GET /api/neura` | Neura wallet data (JSON) |
+| `GET /api/startale` | Startale wallet data (JSON) |
 | `GET /api/konnex/csv` | Konnex data as CSV download |
 | `GET /api/canopy/csv` | Canopy data as CSV download |
 | `GET /api/zugchain/csv` | ZugChain data as CSV download |
@@ -156,4 +160,5 @@ Windows alternative:
 | `GET /api/truthtensor/csv` | Truthtensor data as CSV download |
 | `GET /api/concrete/csv` | Concrete data as CSV download |
 | `GET /api/neura/csv` | Neura data as CSV download |
+| `GET /api/startale/csv` | Startale data as CSV download |
 | `GET /api/status` | File metadata and cache status |

@@ -9,5 +9,6 @@
   "surfDbPath": "D:\\path\\to\\Surf\\db.json",
   "truthtensorDbPath": "D:\\path\\to\\Truthtensor\\db.json",
   "concreteDbPath": "D:\\path\\to\\Concrete\\db.json",
-  "neuraDbPath": "D:\\path\\to\\Neura\\db.json"
+  "neuraDbPath": "D:\\path\\to\\Neura\\db.json",
+  "startaleDbPath": "D:\\Maxi\\modules\\StartaleMastery\\db.json"
 }
